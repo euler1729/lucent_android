@@ -7,6 +7,9 @@
         <entry key="app/src/main/res/font/aladin.xml" value="0.20416666666666666" />
         <entry key="app/src/main/res/font/fonts.xml" value="0.20416666666666666" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/orgcard_layout.xml" value="0.25" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.171" />
+        <entry key="app/src/main/res/xml/network_security_config.xml" value="0.14492753623188406" />
       </map>
     </option>
   </component>
