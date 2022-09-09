@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
                         org.setDescription(description);
                         org.setProfilePicURL(profilePicURL);
                         org.setCoverPicURL(coverPicURL);
+                        org.setDescription(description);
                         orgList.add(org);
                     } catch (JSONException e) {
                         e.printStackTrace();

@@ -15,6 +15,7 @@ import com.example.lucent.model.Organization;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 
 public class HomeOrgAdapter extends RecyclerView.Adapter<HomeOrgAdapter.ViewHolder> {
@@ -39,7 +40,8 @@ public class HomeOrgAdapter extends RecyclerView.Adapter<HomeOrgAdapter.ViewHold
     public void onBindViewHolder(@NonNull HomeOrgAdapter.ViewHolder holder, int position) {
         // to set data to textview and imageview of each card layout
         Organization org = orgModelArrayList.get(position);
-        holder.orgName.setText(org.getName());
+        holder.orgName.setText(org.getName().toUpperCase(Locale.ROOT));
+        holder.orgDesc.setText(org.getDescription());
 //        Picasso.get().load(org.getCoverPicURL()).into(holder.coverImg);
         Picasso.get().load(org.getProfilePicURL()).into(holder.profileImg);
     }
@@ -55,12 +57,14 @@ public class HomeOrgAdapter extends RecyclerView.Adapter<HomeOrgAdapter.ViewHold
         private final ImageView coverImg;
         private final ImageView profileImg;
         private final TextView orgName;
+        private final TextView orgDesc;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             coverImg = itemView.findViewById(R.id.idCardCover);
             profileImg = itemView.findViewById(R.id.idCardProfileImg);
             orgName = itemView.findViewById(R.id.idCardText);
+            orgDesc = itemView.findViewById(R.id.idOrgCardDesc);
         }
     }
 }
