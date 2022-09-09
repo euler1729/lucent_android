@@ -10,6 +10,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -31,7 +33,7 @@ import org.json.JSONObject;
 
 import java.security.PrivateKey;
 import java.util.ArrayList;
-
+import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -44,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_main);
         //Loads Landing page cover image
         ImageView imgView = (ImageView) findViewById(R.id.cover_img);
@@ -54,25 +59,6 @@ public class MainActivity extends AppCompatActivity {
 
 //        API api = new API();
         getOrgList(url);
-//        Log.i("API CALL MAIN", String.valueOf(orgList.size()));
-//        if(orgList.size()>0){
-//
-//            loadingPB.setVisibility(View.GONE);
-////            buildRecycleView(orgList);
-//            RecyclerView recyclerView = findViewById(R.id.homeOrgCards);
-//            HomeOrgAdapter homeOrgAdapter = new HomeOrgAdapter(MainActivity.this, orgList);
-//
-//            LinearLayoutManager linearLayoutManager = new LinearLayoutManager
-//                    (MainActivity.this,
-//                            LinearLayoutManager.VERTICAL,
-//                            false);
-//
-//            recyclerView.setLayoutManager(linearLayoutManager);
-//            recyclerView.setAdapter(homeOrgAdapter);
-//        }else{
-//            Log.i("orglen",String.valueOf(orgList.size()));
-//            Log.i("MainActivity Line 42","Couldn't load orgs");
-//        }
     }
 
     public void getOrgList(String url){
@@ -93,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
                         org.setDescription(description);
                         org.setProfilePicURL(profilePicURL);
                         org.setCoverPicURL(coverPicURL);
+                        org.setDescription(description);
                         orgList.add(org);
                     } catch (JSONException e) {
                         e.printStackTrace();
