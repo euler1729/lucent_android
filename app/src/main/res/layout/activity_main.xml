@@ -1,68 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/activity_main"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/my_drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    tools:context=".view.MainActivity"
     tools:ignore="HardcodedText">
-    <com.google.android.material.navigation.NavigationView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="start"
-                app:menu="@menu/nav_menu" />
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/id_root"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".MainActivity">
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="206dp">
-            <ImageView
-                android:id="@+id/cover_img"
-                android:layout_width="match_parent"
-                android:layout_height="199dp"
-                android:scaleType="centerCrop" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="42dp"
-            android:padding="2dp"
-            tools:ignore="UselessParent">
-
-            <TextView
-                android:id="@+id/org1"
-                android:layout_width="291dp"
-                android:layout_height="40dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="85dp"
-                android:layout_marginEnd="0dp"
-                android:fontFamily="@font/acme"
-                android:text="Top Organizations"
-                android:textColor="#17080D"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                tools:ignore="RtlHardcoded" />
-        </RelativeLayout>
-
-        <ProgressBar
-            android:id="@+id/idLoadingPB"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="visible"
-            android:layout_gravity="center"/>
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/homeOrgCards"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"/>
-    </LinearLayout>
-</androidx.drawerlayout.widget.DrawerLayout>
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/id_fragment_controller"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginBottom="1dp"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/navigation" />
+</androidx.constraintlayout.widget.ConstraintLayout>

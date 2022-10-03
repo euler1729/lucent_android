@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_home"
+    android:transitionName="Home"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.HomeFragment">
+
+    <RelativeLayout
+        android:id="@+id/id_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".view.MainActivity"
+        tools:ignore="UselessParent">
+
+        <ImageButton
+            android:id="@+id/id_top_org"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/cover_img"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="bottom"
+            android:layout_marginEnd="351dp"
+            android:layout_marginBottom="-516dp"
+            android:src="@drawable/leaderboard_icon" />
+
+        <ImageView
+            android:id="@+id/cover_img"
+            android:layout_width="match_parent"
+            android:layout_height="206dp"
+            android:contentDescription="CoverImage"
+            android:scaleType="centerCrop" />
+
+
+    </RelativeLayout>
+
+</androidx.drawerlayout.widget.DrawerLayout>

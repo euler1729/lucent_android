@@ -16,13 +16,20 @@
         android:layout_width="match_parent"
         android:layout_height="226dp">
 
-        <ImageView
-            android:id="@+id/idCardCover"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:contentDescription="Organization" />
 
+        <TextView
+            android:id="@+id/id_rank"
+            android:layout_width="70sp"
+            android:layout_height="20dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/acme"
+            android:padding="2dp"
+            android:text="RANK: "
+            android:textSize="15dp"
+            android:textStyle="bold" />
         <ImageView
             android:id="@+id/idCardProfileImg"
             android:layout_width="182dp"
@@ -37,8 +44,8 @@
             android:contentDescription="Organization" />
 
         <TextView
-            android:fontFamily="@font/acme"
             android:id="@+id/idCardText"
+            android:fontFamily="@font/acme"
             android:layout_width="wrap_content"
             android:layout_height="29dp"
             android:layout_alignParentStart="true"

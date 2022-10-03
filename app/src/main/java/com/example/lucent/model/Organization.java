@@ -15,6 +15,8 @@ public class Organization {
     String profilePicURL;
     String coverPicURL;
     int memberCount;
+
+
     public Organization(){
 
     }
