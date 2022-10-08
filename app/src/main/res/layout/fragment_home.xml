@@ -9,24 +9,12 @@
     tools:context=".view.HomeFragment">
 
     <RelativeLayout
-        android:id="@+id/id_root"
+        android:id="@+id/id_top_org_linear"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context=".view.MainActivity"
         tools:ignore="UselessParent">
-
-        <ImageButton
-            android:id="@+id/id_top_org"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/cover_img"
-            android:layout_alignParentEnd="true"
-            android:layout_gravity="bottom"
-            android:layout_marginEnd="351dp"
-            android:layout_marginBottom="-516dp"
-            android:src="@drawable/leaderboard_icon" />
-
         <ImageView
             android:id="@+id/cover_img"
             android:layout_width="match_parent"

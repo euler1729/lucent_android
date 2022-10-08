@@ -28,6 +28,7 @@
             android:fontFamily="@font/acme"
             android:padding="2dp"
             android:text="RANK: "
+            android:shadowColor="@color/white"
             android:textSize="15dp"
             android:textStyle="bold" />
         <ImageView

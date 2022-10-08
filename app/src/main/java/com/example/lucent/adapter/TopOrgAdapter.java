@@ -14,19 +14,24 @@ import com.example.lucent.R;
 import com.example.lucent.model.Organization;
 import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 
 public class TopOrgAdapter extends RecyclerView.Adapter<TopOrgAdapter.ViewHolder> {
-    private final Context context;
     private final ArrayList<Organization> orgModelArrayList;
-
+    public ItemClickListener clickListener;
     //Constructor
-    public TopOrgAdapter(Context context, ArrayList<Organization> orgModelArrayList) {
-        this.context = context;
+    public TopOrgAdapter(ArrayList<Organization> orgModelArrayList,ItemClickListener clickListener) {
         this.orgModelArrayList = orgModelArrayList;
+        this.clickListener = clickListener;
     }
-
+    @SuppressLint("NotifyDataSetChanged")
+    public void updateOrgList(List<Organization> newList){
+        orgModelArrayList.clear();
+        orgModelArrayList.addAll(newList);
+        notifyDataSetChanged();
+    }
     @NonNull
     @Override
     public TopOrgAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -37,13 +42,16 @@ public class TopOrgAdapter extends RecyclerView.Adapter<TopOrgAdapter.ViewHolder
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull TopOrgAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull TopOrgAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         // to set data to textview and imageview of each card layout
+        int rank = position+1;
         Organization org = orgModelArrayList.get(position);
         holder.orgName.setText(org.getName().toUpperCase(Locale.ROOT));
         holder.orgDesc.setText(org.getDescription());
-        holder.rank.setText("RANK:  "+(++position));
+        holder.rank.setText("RANK:  "+(rank));
         Picasso.get().load(org.getProfilePicURL()).into(holder.profileImg);
+        holder.itemView.setOnClickListener(view -> clickListener.onItemClick(orgModelArrayList.get(position)));
+        holder.itemView.findViewById(R.id.idDonateBtn).setOnClickListener(view -> clickListener.onItemClick(orgModelArrayList.get(position)));
     }
 
     @Override
@@ -65,5 +73,8 @@ public class TopOrgAdapter extends RecyclerView.Adapter<TopOrgAdapter.ViewHolder
             orgDesc = itemView.findViewById(R.id.idOrgCardDesc);
             rank = itemView.findViewById(R.id.id_rank);
         }
+    }
+    public interface ItemClickListener{
+        public void onItemClick(Organization organization);
     }
 }

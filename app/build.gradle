@@ -22,7 +22,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    buildFeatures{
+    buildFeatures {
+        dataBinding true
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -37,14 +38,13 @@ def supportVersion = '28.0.0'
 def glideVersion = '4.9.0'
 def rxJavaVersion = '3.0.0'
 def roomVersion = '2.1.0-rc01'
-def navVersion = '2.2.0-rc04'
+def navVersion = '2.6.0-alpha01'
 def preferencesVersion = '1.0.0'
 def retrofitVersion = '2.3.0'
 def lifecycle_version = "2.6.0-alpha02"
 def arch_version = "2.1.0"
 
 dependencies {
-
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.appcompat:appcompat:1.5.1'
 
@@ -74,34 +74,34 @@ dependencies {
 //    annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
 
     //noinspection GradleDependency
-    implementation "androidx.room:room-runtime:$roomVersion"
+    implementation "androidx.room:room-runtime:2.5.0-alpha03"
     implementation "androidx.legacy:legacy-support-v4:1.0.0"
-    annotationProcessor "androidx.room:room-compiler:$roomVersion"
+    annotationProcessor "androidx.room:room-compiler:2.5.0-alpha03"
 
     //noinspection GradleDependency
-    implementation "androidx.navigation:navigation-fragment:$navVersion"
+    implementation "androidx.navigation:navigation-fragment:2.6.0-alpha01"
     //noinspection GradleDependency
     implementation "androidx.navigation:navigation-ui:$navVersion"
 
-    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
-    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:2.9.0"
 
     implementation 'androidx.cardview:cardview:1.0.0'
 
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.android.volley:volley:1.2.1'
 
-    implementation 'com.github.bumptech.glide:glide:4.13.2'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.13.2'
+    implementation 'com.github.bumptech.glide:glide:4.14.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.14.1'
 
-    implementation "io.reactivex.rxjava3:rxjava:$rxJavaVersion"
+    implementation "io.reactivex.rxjava3:rxjava:3.1.5"
     implementation "io.reactivex.rxjava3:rxandroid:$rxJavaVersion"
 
     implementation "com.android.support:palette-v7:$supportVersion"
 
     //noinspection GradleDependency
-    implementation "androidx.preference:preference:$preferencesVersion"
+    implementation "androidx.preference:preference:1.2.0"
 
     implementation 'com.google.android.material:material:1.8.0-alpha01'
 

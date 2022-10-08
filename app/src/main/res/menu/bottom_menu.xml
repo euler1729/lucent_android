@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="HardcodedText">
+    <item
+        android:id= "@+id/homeFragment"
+        android:icon="@drawable/icon_home"
+        android:title="Home" />
+    <item
+        android:id="@+id/topOrgFragment"
+        android:icon="@drawable/leaderboard_icon"
+        android:title="Top Org" />
+    <item
+        android:id= "@+id/myOrgFragment"
+        android:title="My Org"
+        android:icon="@drawable/icon_list"/>
+    <item
+        android:id="@+id/ProfileFragment"
+        android:title="Profile"
+        android:icon="@drawable/icon_profile"/>
+
+
+</menu>

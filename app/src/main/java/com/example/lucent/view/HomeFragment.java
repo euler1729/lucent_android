@@ -57,6 +57,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        requireActivity().setTitle("Home");
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         ImageView imgView = (ImageView) view.findViewById(R.id.cover_img);
         imgView.setImageResource(R.drawable.cover_img);
@@ -67,13 +68,13 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        topOrgFragBtn = (ImageButton) view.findViewById(R.id.id_top_org);
-        topOrgFragBtn.setOnClickListener(v->{
-            goToTopOrgPage();
-        });
+//        topOrgFragBtn = (ImageButton) view.findViewById(R.id.id_top_org);
+//        topOrgFragBtn.setOnClickListener(v->{
+//            goToTopOrgPage();
+//        });
     }
-    void goToTopOrgPage(){
-        HomeFragmentDirections.ActionHomeFragmentToTopOrgFragment action = HomeFragmentDirections.actionHomeFragmentToTopOrgFragment("From Home");
-        Navigation.findNavController(topOrgFragBtn).navigate(action);
-    }
+//    void goToTopOrgPage(){
+//        HomeFragmentDirections.ActionHomeFragmentToTopOrgFragment action = HomeFragmentDirections.actionHomeFragmentToTopOrgFragment("From Home");
+//        Navigation.findNavController(topOrgFragBtn).navigate(action);
+//    }
 }
