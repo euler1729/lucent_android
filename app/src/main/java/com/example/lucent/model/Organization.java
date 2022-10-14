@@ -1,14 +1,21 @@
 package com.example.lucent.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Organization {
+    @SerializedName("id")
     int id;
+    @SerializedName("name")
     String name;
+    @SerializedName("description")
     String description;
     boolean autoApprove;
     boolean requireCode;
     boolean requireNID;
     int balance;
     int spent;
+    @SerializedName("manager")
+    Manager manager;
     int manager_id;
     String manager_name;
     boolean published;
@@ -30,6 +37,7 @@ public class Organization {
         this.balance = balance;
         this.spent = spent;
         this.manager_id = manager_id;
+        manager = new Manager(manager_id,manager_name);
         this.manager_name = manager_name;
         this.published = published;
         this.profilePicURL = profilePicURL;

@@ -42,7 +42,7 @@
             </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
         <ProgressBar
-        android:id="@+id/id_loading_progressbar"
+        android:id="@+id/id_loading_progressbar2"
         android:layout_width="93dp"
         android:layout_height="72dp"
         android:layout_gravity="center"

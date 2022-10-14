@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fragment_home"
     android:transitionName="Home"
@@ -38,7 +39,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="206dp"
                     android:contentDescription="CoverImage"
-                    android:scaleType="centerCrop" />
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/cover_img"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/topOrgCards"
@@ -51,12 +53,24 @@
                 android:layout_width="93dp"
                 android:layout_height="72dp"
                 android:layout_gravity="center"
-                android:visibility="invisible"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/id_top_org_linear"
                 tools:ignore="MissingConstraints" />
+
+            <TextView
+                android:id="@+id/id_error_message"
+                android:layout_width="271dp"
+                android:layout_height="25dp"
+                android:textColor="#C73E3E"
+                android:visibility="gone"
+                android:text="Something went wrong while fetching data!"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/id_top_org_linear"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -65,3 +79,4 @@
 
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</layout>

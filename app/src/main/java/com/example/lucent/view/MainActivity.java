@@ -1,13 +1,16 @@
 package com.example.lucent.view;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,6 +21,7 @@ import android.widget.Toolbar;
 import com.example.lucent.R;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -34,8 +38,41 @@ public class MainActivity extends AppCompatActivity {
         assert navHostFragment != null;
         controller = navHostFragment.getNavController();
         NavigationUI.setupWithNavController(bottomNavigationView, controller);
-
+//        try{
+//            bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+//                @SuppressLint("NonConstantResourceId")
+//                @Override
+//                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//                    Fragment selectedFragment;
+//                    switch(item.getItemId()){
+//                        case R.id.homeFragment:
+//                            selectedFragment = new HomeFragment();
+//                            break;
+//                        case R.id.myOrgFragment:
+//                            selectedFragment = new MyOrgFragment();
+//                            break;
+//                        case R.id.ProfileFragment:
+//                            selectedFragment = new ProfileFragment();
+//                            break;
+//                        default:
+//                            selectedFragment = null;
+//                            break;
+//                    }
+//                    assert selectedFragment != null;
+//                    getSupportFragmentManager().beginTransaction().replace(R.id.id_fragment_controller,selectedFragment).commit();
+//                    return true;
+//                }
+//            });
+//        }catch (Exception exp){
+//            exp.getMessage();
+//            exp.getStackTrace();
+//        }
 //        toolbar = findViewById();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -53,4 +90,5 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

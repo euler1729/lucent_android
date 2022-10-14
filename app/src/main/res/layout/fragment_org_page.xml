@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <androidx.constraintlayout.widget.ConstraintLayout
+<layout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/id_org_page"
-        tools:context=".view.OrgPageFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:context=".view.OrgPageFragment">
 
         <ImageView
             android:id="@+id/id_orgpage_cover"
             android:layout_width="match_parent"
             android:layout_height="229dp"
+            android:contentDescription="TODO"
             android:scaleType="fitXY"
-            tools:src="@tools:sample/backgrounds/scenic"
-            tools:ignore="MissingConstraints" />
+            tools:ignore="MissingConstraints"
+            tools:src="@tools:sample/backgrounds/scenic" />
 
         <ImageView
             android:id="@+id/id_orgpage_profilepic"

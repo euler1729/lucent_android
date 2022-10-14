@@ -2,6 +2,7 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
@@ -13,22 +14,19 @@
     app:cardUseCompatPadding="true">
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="263dp">
+        android:layout_width="wrap_content"
+        android:layout_height="228dp">
 
         <ImageView
             android:id="@+id/idCardProfileImg"
-            android:layout_width="108dp"
-            android:layout_height="134dp"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
             android:layout_gravity="center"
-            android:layout_marginStart="16dp"
             android:layout_marginTop="40dp"
-            android:layout_marginEnd="242dp"
-            android:layout_marginBottom="89dp"
+            android:layout_marginEnd="239dp"
             android:contentDescription="Organization" />
 
         <TextView
@@ -38,12 +36,10 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
             android:layout_gravity="bottom|center_horizontal"
             android:layout_marginStart="138dp"
             android:layout_marginTop="39dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="192dp"
             android:fontFamily="@font/acme"
             android:gravity="center"
             android:text="orgName"
@@ -57,24 +53,24 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
             android:layout_marginStart="138dp"
             android:layout_marginTop="79dp"
             android:layout_marginEnd="13dp"
-            android:layout_marginBottom="94dp"
             android:text="TextView" />
 
         <Button
             android:id="@+id/idDonateBtn"
-            android:layout_width="317dp"
-            android:layout_height="50dp"
+            android:layout_width="82dp"
+            android:layout_height="36dp"
+            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="199dp"
-            android:layout_marginEnd="1dp"
-            android:layout_marginBottom="14dp"
-            android:text="Donate" />
+            android:layout_marginStart="144dp"
+            android:layout_marginTop="182dp"
+            android:layout_marginEnd="140dp"
+            android:text="Donate"
+            android:textSize="10sp"
+            tools:ignore="SmallSp" />
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

@@ -69,7 +69,7 @@ public class TopOrgFragment extends Fragment implements TopOrgAdapter.ItemClickL
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_top_org, container,false);
         view = binding.getRoot();
         swipeRefreshLayout = view.findViewById(R.id.id_top_org_swipe);
-        progressBar = binding.idLoadingProgressbar;
+        progressBar = binding.idLoadingProgressbar2;
         orgListAdapter = new TopOrgAdapter(new ArrayList<>(), this);
         requireActivity().setTitle("Top Organizations");
         return view;
@@ -79,7 +79,7 @@ public class TopOrgFragment extends Fragment implements TopOrgAdapter.ItemClickL
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(TopOrgViewModel.class);
-        viewModel.refresh();//->The line is problematic due to api call
+        viewModel.refresh(requireContext());//->The line is problematic due to api call
         recyclerView = binding.topOrgCards;
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         recyclerView.setAdapter(orgListAdapter);
@@ -121,7 +121,8 @@ public class TopOrgFragment extends Fragment implements TopOrgAdapter.ItemClickL
         try {
             Fragment fragment = OrgPageFragment.newInstance(organization);
             FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.id_fragment_controller,fragment,"fragment_org_page");
+//            transaction.hide(this);
+            transaction.replace(R.id.id_top_org,fragment,"fragment_org_page").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             transaction.addToBackStack(null);
             transaction.commit();
         }catch (Exception e){
@@ -132,43 +133,6 @@ public class TopOrgFragment extends Fragment implements TopOrgAdapter.ItemClickL
     }
 
     //Loads Top Organisations
-    public void getOrgList(String url){
-        ArrayList<Organization> orgList = new ArrayList<>();
-        RequestQueue queue =  Volley.newRequestQueue(requireContext());
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                for (int i = 0; i < response.length(); ++i) {
-                    try {
-                        JSONObject jsonObject = response.getJSONObject(i);
-                        String name = jsonObject.getString("name");
-                        String description = jsonObject.getString("description");
-                        String profilePicURL = jsonObject.getString("profilePicURL");
-                        String coverPicURL = jsonObject.getString("coverPicURL");
-                        Organization org = new Organization();
-                        org.setName(name);
-                        org.setProfilePicURL(profilePicURL);
-                        org.setCoverPicURL(coverPicURL);
-                        org.setDescription(description);
-                        orgList.add(org);
-//                        Log.i("api call",name+" \nbalance: "+jsonObject.getInt("balance")+" \nMemberCount: "+jsonObject.getInt("memberCount"));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    orgList.sort((a,b)->a.getName().compareTo(b.getName()));
-                }
-                buildRecycleView(orgList);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(requireContext(),error.getMessage(),Toast.LENGTH_SHORT).show();
-            }
-        });
-        queue.add(jsonArrayRequest);
-    }
 
     //Inserts Organizations list into Card adapter
     private void buildRecycleView(ArrayList<Organization>orgList){

@@ -36,6 +36,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.lucent.R;
 import com.example.lucent.adapter.TopOrgAdapter;
+import com.example.lucent.databinding.FragmentHomeBinding;
 import com.example.lucent.databinding.FragmentTopOrgBinding;
 import com.example.lucent.model.Organization;
 import com.example.lucent.viewmodel.TopOrgViewModel;
@@ -60,10 +61,11 @@ public class HomeFragment extends Fragment implements TopOrgAdapter.ItemClickLis
 
     private TopOrgViewModel viewModel;
     private RecyclerView recyclerView;
-    private FragmentTopOrgBinding binding;
+    private FragmentHomeBinding binding;
     private TopOrgAdapter orgListAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ProgressBar progressBar;
+    private TextView errTextView;
 
     public HomeFragment() {
 
@@ -87,6 +89,7 @@ public class HomeFragment extends Fragment implements TopOrgAdapter.ItemClickLis
         }
     }
 
+    @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -96,10 +99,11 @@ public class HomeFragment extends Fragment implements TopOrgAdapter.ItemClickLis
         imgView.setImageResource(R.drawable.cover_img);
 
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_top_org, container,false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container,false);
         view = binding.getRoot();
         swipeRefreshLayout = view.findViewById(R.id.fragment_home);
-        progressBar = binding.idLoadingProgressbar;
+        progressBar = view.findViewById(R.id.id_loading_progressbar);
+        errTextView = view.findViewById(R.id.id_error_message);
         orgListAdapter = new TopOrgAdapter(new ArrayList<>(), this);
 
         return view;
@@ -110,32 +114,37 @@ public class HomeFragment extends Fragment implements TopOrgAdapter.ItemClickLis
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(TopOrgViewModel.class);
-        viewModel.refresh();//->The line is problematic due to api call
+        viewModel.refresh2();//->The line is problematic due to api call
         recyclerView = binding.topOrgCards;
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         recyclerView.setAdapter(orgListAdapter);
+        progressBar.setVisibility(View.VISIBLE);
         observeViewModel();
-//        getOrgList(url);
-
     }
 
     private void observeViewModel(){
         viewModel.orgs.observe(getViewLifecycleOwner(), organizations -> {
-            if(organizations != null && organizations instanceof List){
+            if(organizations != null){
                 recyclerView.setVisibility(View.VISIBLE);
                 orgListAdapter.updateOrgList(organizations);
+//                progressBar.setVisibility(View.GONE);
             }
         });
-//        viewModel.orgLoadErr.observe(this, isErr->{
-//            if(isErr!=null && isErr instanceof Boolean){
-//
-//            }
-//        });
+        viewModel.orgLoadErr.observe(getViewLifecycleOwner(), isErr->{
+            if(isErr != null){
+                if(isErr){
+                    recyclerView.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.GONE);
+                    errTextView.setVisibility(View.VISIBLE);
+                }
+            }
+        });
         viewModel.loading.observe(getViewLifecycleOwner(), isLoading->{
-            if(isLoading!=null && isLoading instanceof Boolean){
+            if(isLoading != null){
                 progressBar.setVisibility(isLoading? View.VISIBLE:View.GONE);
                 if(isLoading){
                     recyclerView.setVisibility(View.GONE);
+                    errTextView.setVisibility(View.GONE);
                 }
             }
         });
