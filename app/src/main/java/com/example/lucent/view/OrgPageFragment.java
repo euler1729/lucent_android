@@ -14,13 +14,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.lucent.R;
-import com.example.lucent.databinding.FragmentOrgPageBinding;
+import com.example.lucent.databinding.FragmentOrgPageBindingImpl;
 import com.example.lucent.model.Organization;
 import com.squareup.picasso.Picasso;
 
 public class OrgPageFragment extends Fragment {
 
-    private FragmentOrgPageBinding binding;
+    private FragmentOrgPageBindingImpl binding;
     private View view;
 
     private static final String NAME = "param1";

@@ -48,7 +48,7 @@ public class TopOrgAdapter extends RecyclerView.Adapter<TopOrgAdapter.ViewHolder
         Organization org = orgModelArrayList.get(position);
         holder.orgName.setText(org.getName().toUpperCase(Locale.ROOT));
         holder.orgDesc.setText(org.getDescription());
-        holder.rank.setText("RANK:  "+(rank));
+//        holder.rank.setText("RANK:  "+(rank));
         Picasso.get().load(org.getProfilePicURL()).into(holder.profileImg);
         holder.itemView.setOnClickListener(view -> clickListener.onItemClick(orgModelArrayList.get(position)));
         holder.itemView.findViewById(R.id.idDonateBtn).setOnClickListener(view -> clickListener.onItemClick(orgModelArrayList.get(position)));
@@ -64,14 +64,14 @@ public class TopOrgAdapter extends RecyclerView.Adapter<TopOrgAdapter.ViewHolder
         private final ImageView profileImg;
         private final TextView orgName;
         private final TextView orgDesc;
-        private final TextView rank;
+//        private final TextView rank;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             profileImg = itemView.findViewById(R.id.idCardProfileImg);
             orgName = itemView.findViewById(R.id.idCardText);
             orgDesc = itemView.findViewById(R.id.idOrgCardDesc);
-            rank = itemView.findViewById(R.id.id_rank);
+//            rank = itemView.findViewById(R.id.id_rank);
         }
     }
     public interface ItemClickListener{

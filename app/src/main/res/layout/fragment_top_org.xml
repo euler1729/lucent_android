@@ -24,12 +24,22 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:context=".view.MainActivity"
             tools:ignore="UselessParent">
+            <ImageView
+                android:id="@+id/cover_img"
+                android:layout_width="match_parent"
+                android:layout_height="206dp"
+                android:contentDescription="CoverImage"
+                android:scaleType="centerCrop"
+                android:src="@drawable/cover_img"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/topOrgCards"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal" />
+                android:orientation="horizontal" >
+
+
+            </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
         <ProgressBar
         android:id="@+id/id_loading_progressbar"
@@ -44,5 +54,7 @@
         tools:ignore="MissingConstraints" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>

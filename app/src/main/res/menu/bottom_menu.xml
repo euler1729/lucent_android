@@ -7,10 +7,6 @@
         android:icon="@drawable/icon_home"
         android:title="Home" />
     <item
-        android:id="@+id/topOrgFragment"
-        android:icon="@drawable/leaderboard_icon"
-        android:title="Top Org" />
-    <item
         android:id= "@+id/myOrgFragment"
         android:title="My Org"
         android:icon="@drawable/icon_list"/>

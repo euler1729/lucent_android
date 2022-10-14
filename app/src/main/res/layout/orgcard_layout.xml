@@ -14,79 +14,66 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="226dp">
+        android:layout_height="263dp">
 
-
-        <TextView
-            android:id="@+id/id_rank"
-            android:layout_width="70sp"
-            android:layout_height="20dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
-            android:fontFamily="@font/acme"
-            android:padding="2dp"
-            android:text="RANK: "
-            android:shadowColor="@color/white"
-            android:textSize="15dp"
-            android:textStyle="bold" />
         <ImageView
             android:id="@+id/idCardProfileImg"
-            android:layout_width="182dp"
-            android:layout_height="match_parent"
+            android:layout_width="108dp"
+            android:layout_height="134dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_gravity="center"
-            android:layout_marginEnd="194dp"
-            android:layout_marginBottom="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="242dp"
+            android:layout_marginBottom="89dp"
             android:contentDescription="Organization" />
 
         <TextView
             android:id="@+id/idCardText"
-            android:fontFamily="@font/acme"
-            android:layout_width="wrap_content"
-            android:layout_height="29dp"
+            android:layout_width="212dp"
+            android:layout_height="32dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginStart="195dp"
-            android:layout_marginTop="18dp"
-            android:layout_marginEnd="11dp"
-            android:layout_marginBottom="179dp"
+            android:layout_marginStart="138dp"
+            android:layout_marginTop="39dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="192dp"
+            android:fontFamily="@font/acme"
+            android:gravity="center"
             android:text="orgName"
             android:textSize="20sp"
-            android:textStyle="bold"
-            android:gravity="center"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/idOrgCardDesc"
-            android:layout_width="157dp"
-            android:layout_height="101dp"
+            android:layout_width="216dp"
+            android:layout_height="90dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginStart="195dp"
-            android:layout_marginTop="56dp"
+            android:layout_marginStart="138dp"
+            android:layout_marginTop="79dp"
             android:layout_marginEnd="13dp"
-            android:layout_marginBottom="69dp"
+            android:layout_marginBottom="94dp"
             android:text="TextView" />
 
         <Button
             android:id="@+id/idDonateBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_width="317dp"
+            android:layout_height="50dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginTop="168dp"
-            android:layout_marginEnd="45dp"
-            android:layout_marginBottom="18dp"
+            android:layout_marginTop="199dp"
+            android:layout_marginEnd="1dp"
+            android:layout_marginBottom="14dp"
             android:text="Donate" />
     </RelativeLayout>
 

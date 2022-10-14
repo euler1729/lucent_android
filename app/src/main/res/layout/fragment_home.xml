@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fragment_home"
     android:transitionName="Home"
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -9,20 +9,59 @@
     tools:context=".view.HomeFragment">
 
     <RelativeLayout
-        android:id="@+id/id_top_org_linear"
+        android:id="@+id/id_top_org_relative"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context=".view.MainActivity"
         tools:ignore="UselessParent">
-        <ImageView
-            android:id="@+id/cover_img"
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/id_top_org"
             android:layout_width="match_parent"
-            android:layout_height="206dp"
-            android:contentDescription="CoverImage"
-            android:scaleType="centerCrop" />
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/id_top_org_linear"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:context=".view.MainActivity"
+                tools:ignore="UselessParent">
+                <ImageView
+                    android:id="@+id/cover_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="206dp"
+                    android:contentDescription="CoverImage"
+                    android:scaleType="centerCrop" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/topOrgCards"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal" />
+            </LinearLayout>
+            <ProgressBar
+                android:id="@+id/id_loading_progressbar"
+                android:layout_width="93dp"
+                android:layout_height="72dp"
+                android:layout_gravity="center"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/id_top_org_linear"
+                tools:ignore="MissingConstraints" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </RelativeLayout>
 
-</androidx.drawerlayout.widget.DrawerLayout>
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

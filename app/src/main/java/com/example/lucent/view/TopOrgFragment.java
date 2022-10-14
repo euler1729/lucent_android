@@ -21,6 +21,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -115,8 +116,8 @@ public class TopOrgFragment extends Fragment implements TopOrgAdapter.ItemClickL
 
     @Override
     public void onItemClick(Organization organization) {
-        Toast toast = Toast.makeText(getActivity(),organization.getName(),Toast.LENGTH_SHORT);
-        toast.show();
+//        Toast toast = Toast.makeText(getActivity(),organization.getName(),Toast.LENGTH_SHORT);
+//        toast.show();
         try {
             Fragment fragment = OrgPageFragment.newInstance(organization);
             FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
@@ -168,6 +169,7 @@ public class TopOrgFragment extends Fragment implements TopOrgAdapter.ItemClickL
         });
         queue.add(jsonArrayRequest);
     }
+
     //Inserts Organizations list into Card adapter
     private void buildRecycleView(ArrayList<Organization>orgList){
         orgListAdapter = new TopOrgAdapter(orgList,this);
