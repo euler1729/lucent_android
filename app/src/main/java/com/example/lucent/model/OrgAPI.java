@@ -29,7 +29,7 @@ public interface OrgAPI {
 
 //    Register User
 //    @GET("user/registration")
-    @HTTP(method = "GET", path = "user/registration", hasBody = true)
+    @HTTP(method = "POST", path = "user/registration", hasBody = true)
     Single<User> register(@Body RegisterRequest registerRequest);
 
 }
