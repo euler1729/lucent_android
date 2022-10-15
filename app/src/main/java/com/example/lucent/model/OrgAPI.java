@@ -4,7 +4,9 @@ package com.example.lucent.model;
 import java.util.List;
 
 import io.reactivex.Single;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -24,5 +26,10 @@ public interface OrgAPI {
 //    Get Profile Information
     @GET("user/profile")
     Single<User> getProfile(@Header("AUTHORIZATION") String bearerToken);
+
+//    Register User
+//    @GET("user/registration")
+    @HTTP(method = "GET", path = "user/registration", hasBody = true)
+    Single<User> register(@Body RegisterRequest registerRequest);
 
 }
