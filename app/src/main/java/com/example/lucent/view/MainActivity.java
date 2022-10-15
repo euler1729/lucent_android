@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.id_action_login) {
-            Toast.makeText(this,"Login Button Clicked!",Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this,"Login Button Clicked!",Toast.LENGTH_SHORT).show();
             Fragment fragment = new LoginFragment();
             getSupportFragmentManager()
                     .beginTransaction()
