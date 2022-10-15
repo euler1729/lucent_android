@@ -1,4 +1,4 @@
-package com.example.lucent.sharedpreferences;
+package com.example.lucent.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;

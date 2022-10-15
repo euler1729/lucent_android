@@ -1,7 +1,5 @@
 package com.example.lucent.viewmodel;
 
-import static androidx.core.content.ContentProviderCompat.requireContext;
-
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
@@ -44,23 +42,16 @@ public class TopOrgViewModel extends AndroidViewModel {
     public MutableLiveData<Boolean> orgLoadErr = new MutableLiveData<Boolean>(true);
     public MutableLiveData<Boolean> loading = new MutableLiveData<Boolean>(true);
 
-    private API api = new API();
+    private final API api = new API();
 
-    private CompositeDisposable disposable = new CompositeDisposable();
+    private final CompositeDisposable disposable = new CompositeDisposable();
 
     public TopOrgViewModel(@NonNull Application application) {
         super(application);
     }
 
-    public void refresh(Context context) {
-
-        getOrgList(url, context);
-        orgs.setValue(orgList);
-        orgLoadErr.setValue(false);
-        loading.setValue(false);
-    }
-
-    public void refresh2() {
+    //Fetches card data for
+    public void refresh() {
         fetchFromRemote();
     }
 
@@ -95,44 +86,5 @@ public class TopOrgViewModel extends AndroidViewModel {
         disposable.clear();
     }
 
-    public void getOrgList(String url, Context context) {
-        if (orgList != null) {
-            return;
-        }
-//        orgList = new ArrayList<Organization>();
-        RequestQueue queue = Volley.newRequestQueue(context);
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                for (int i = 0; i < response.length(); ++i) {
-                    try {
-                        JSONObject jsonObject = response.getJSONObject(i);
-                        Organization org = new Organization();
-                        org.setId(jsonObject.getInt("id"));
-                        org.setName(jsonObject.getString("name"));
-                        org.setProfilePicURL(jsonObject.getString("profilePicURL"));
-                        org.setCoverPicURL(jsonObject.getString("coverPicURL"));
-                        org.setDescription(jsonObject.getString("description"));
-                        org.setBalance(jsonObject.getInt("balance"));
-                        org.setMemberCount(jsonObject.getInt("memberCount"));
-                        orgList.add(org);
-//                        Log.i("api call",name+" \nbalance: "+jsonObject.getInt("balance")+" \nMemberCount: "+jsonObject.getInt("memberCount"));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    orgList.sort((a, b) -> a.getName().compareTo(b.getName()));
-                    Log.i("ORG LIST: ", orgList.get(0).getName());
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-        queue.add(jsonArrayRequest);
-    }
 
 }

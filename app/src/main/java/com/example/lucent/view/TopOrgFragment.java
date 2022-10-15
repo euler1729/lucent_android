@@ -79,7 +79,7 @@ public class TopOrgFragment extends Fragment implements TopOrgAdapter.ItemClickL
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(TopOrgViewModel.class);
-        viewModel.refresh(requireContext());//->The line is problematic due to api call
+        viewModel.refresh();//->The line is problematic due to api call
         recyclerView = binding.topOrgCards;
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         recyclerView.setAdapter(orgListAdapter);

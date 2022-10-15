@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,17 +17,19 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.lucent.R;
+import com.example.lucent.databinding.FragmentOrgPageBinding;
 import com.example.lucent.databinding.FragmentOrgPageBindingImpl;
 import com.example.lucent.model.Organization;
+import com.example.lucent.viewmodel.OrgPageViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.squareup.picasso.Picasso;
 
 public class OrgPageFragment extends Fragment {
 
-    private FragmentOrgPageBindingImpl binding;
+    private FragmentOrgPageBinding binding;
     private View view;
-
+    private OrgPageViewModel viewModel;
     private static final String NAME = "param1";
     private static Organization organization;
 
@@ -50,6 +53,7 @@ public class OrgPageFragment extends Fragment {
     @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        requireActivity().setTitle(organization.getName());
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_org_page, container, false);
         view = binding.getRoot();
         binding.idOrgpageOrgName.setText(organization.getName());
@@ -62,35 +66,7 @@ public class OrgPageFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottomNavigationView);
-        try{
-            bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-                @SuppressLint("NonConstantResourceId")
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    Fragment selectedFragment;
-                    switch(item.getItemId()){
-                        case R.id.homeFragment:
-                            selectedFragment = new HomeFragment();
-                            break;
-                        case R.id.myOrgFragment:
-                            selectedFragment = new MyOrgFragment();
-                            break;
-                        case R.id.ProfileFragment:
-                            selectedFragment = new ProfileFragment();
-                            break;
-                        default:
-                            selectedFragment = null;
-                            break;
-                    }
-                    assert selectedFragment != null;
-                    requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.id_fragment_controller,selectedFragment).commit();
-                    return true;
-                }
-            });
-        }catch (Exception exp){
-            exp.getMessage();
-            exp.getStackTrace();
-        }
+        viewModel = new ViewModelProvider(this).get(OrgPageViewModel.class);
+        viewModel.refresh("spending/latest/"+organization.getId());
     }
 }

@@ -87,6 +87,12 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.id_action_login) {
             Toast.makeText(this,"Login Button Clicked!",Toast.LENGTH_SHORT).show();
+            Fragment fragment = new LoginFragment();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.id_fragment_controller,fragment,"fragment_org_page")
+                    .addToBackStack(null)
+                    .commit();
         }
         return super.onOptionsItemSelected(item);
     }

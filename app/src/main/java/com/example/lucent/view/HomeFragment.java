@@ -101,6 +101,7 @@ public class HomeFragment extends Fragment implements TopOrgAdapter.ItemClickLis
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container,false);
         view = binding.getRoot();
+        swipeRefreshLayout = binding.fragmentHome;
         swipeRefreshLayout = view.findViewById(R.id.fragment_home);
         progressBar = view.findViewById(R.id.id_loading_progressbar);
         errTextView = view.findViewById(R.id.id_error_message);
@@ -114,11 +115,18 @@ public class HomeFragment extends Fragment implements TopOrgAdapter.ItemClickLis
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(TopOrgViewModel.class);
-        viewModel.refresh2();//->The line is problematic due to api call
+        viewModel.refresh();//->The line is problematic due to api call
         recyclerView = binding.topOrgCards;
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         recyclerView.setAdapter(orgListAdapter);
         progressBar.setVisibility(View.VISIBLE);
+        swipeRefreshLayout.setOnRefreshListener(()->{
+            recyclerView.setVisibility(View.GONE);
+            errTextView.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
+            viewModel.refresh();
+            swipeRefreshLayout.setRefreshing(false);
+        });
         observeViewModel();
     }
 
@@ -151,7 +159,7 @@ public class HomeFragment extends Fragment implements TopOrgAdapter.ItemClickLis
     }
 
     @Override
-    public void onItemClick(Organization organization) {
+    public void onItemClick(Organization organization) {//To go orgpage from cards
 //        Toast toast = Toast.makeText(getActivity(),organization.getName(),Toast.LENGTH_SHORT);
 //        toast.show();
         try {
