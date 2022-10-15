@@ -1,6 +1,7 @@
 package com.example.lucent.view;
 
-import android.content.Intent;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -24,13 +25,11 @@ import com.example.lucent.databinding.FragmentTopOrgBinding;
 import com.example.lucent.model.API;
 import com.example.lucent.model.LoginResponse;
 import com.example.lucent.viewmodel.LoginViewModel;
-import com.example.lucent.viewmodel.TopOrgViewModel;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Call;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -128,6 +127,11 @@ public class LoginFragment extends Fragment {
                                 loginFailed.setValue(false);
                                 navMyOrg();
 //                                Toast.makeText(getActivity(), "Logged in", Toast.LENGTH_SHORT).show();
+                                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Token", Context.MODE_PRIVATE);
+                                SharedPreferences.Editor storeToken = sharedPreferences.edit();
+                                storeToken.putString("access_token", value.getAccess_token());
+                                storeToken.putString("refresh_token", value.getRefresh_token());
+                                storeToken.commit();
                             }
 
                             @Override
@@ -140,12 +144,16 @@ public class LoginFragment extends Fragment {
                             }
                         })
         );
+
+//        To access Token
+//        SharedPreferences token = getActivity().getSharedPreferences("Token", Context.MODE_PRIVATE);
+//        String refreshToken = token.getString("refresh_token", "Token Here");
     }
 
 
 
     public void navToRegister(){
-        Fragment fragment = new RegisterFragmanet();
+        Fragment fragment = new RegisterFragment();
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.id_fragment_controller, fragment);
@@ -161,4 +169,6 @@ public class LoginFragment extends Fragment {
         fragmentTransaction.addToBackStack(HomeFragment.class.getName());
         fragmentTransaction.commit();
     }
+
+
 }
