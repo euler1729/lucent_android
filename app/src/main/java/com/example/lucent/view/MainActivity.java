@@ -10,7 +10,9 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,6 +28,7 @@ import com.google.android.material.navigation.NavigationBarView;
 
 public class MainActivity extends AppCompatActivity {
     NavController controller;
+    public static Menu menu;
 
     @SuppressLint({"WrongViewCast", "MissingInflatedId"})
     @Override
@@ -79,8 +82,25 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.actionbar_menu,menu);
+        this.menu = menu;
+        updateMenuTitles();
         return true;
     }
+
+    public void updateMenuTitles() {
+        MenuItem bedMenuItem = menu.findItem(R.id.id_action_login);
+        SharedPreferences token = this.getSharedPreferences("Token", Context.MODE_PRIVATE);
+        String refreshToken = token.getString("refresh_token", null);
+
+
+        if(refreshToken == null){
+            bedMenuItem.setTitle("Login");
+        }
+        else{
+            bedMenuItem.setTitle(token.getString("name", ""));
+        }
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

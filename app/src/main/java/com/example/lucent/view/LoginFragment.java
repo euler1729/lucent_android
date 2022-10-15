@@ -31,11 +31,6 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link LoginFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class LoginFragment extends Fragment {
 
     EditText loginPhone, loginPassword;
@@ -48,9 +43,9 @@ public class LoginFragment extends Fragment {
 
     private final API api = new API();
     private final CompositeDisposable disposable = new CompositeDisposable();
-    public MutableLiveData<LoginResponse> loginResponse = new MutableLiveData<>(new LoginResponse());
-    public MutableLiveData<Boolean> loggingIn = new MutableLiveData<>(false);
-    public MutableLiveData<Boolean> loginFailed = new MutableLiveData<>(false);
+    private MutableLiveData<LoginResponse> loginResponse = new MutableLiveData<>(new LoginResponse());
+    private MutableLiveData<Boolean> loggingIn = new MutableLiveData<>(false);
+    private MutableLiveData<Boolean> loginFailed = new MutableLiveData<>(false);
 
     private String phone, password;
 
@@ -88,6 +83,16 @@ public class LoginFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
+        /*
+        Redirect to profile if refresh_token is found
+         */
+        SharedPreferences token = getActivity().getSharedPreferences("Token", Context.MODE_PRIVATE);
+        String refreshToken = token.getString("refresh_token", null);
+        if(refreshToken != null){
+            navProfile();
+        }
+
+
         // Variable initialization
         loginPhone = view.findViewById(R.id.login_phone);
         loginPassword = view.findViewById(R.id.login_password);
@@ -107,14 +112,12 @@ public class LoginFragment extends Fragment {
     public void login(){
         phone = String.valueOf(loginPhone.getText());
         password = String.valueOf(loginPassword.getText());
-        Toast.makeText(getActivity(), "Logging in " + phone + " " + password, Toast.LENGTH_SHORT).show();
-
-
-//        loginViewModel.loginUser();
-
         loggingIn.setValue(true);
         loginBtn.setText("Loading");
 
+        /*
+        API Call
+         */
         disposable.add(
                 api.login(phone, password)
                         .subscribeOn(Schedulers.newThread())
@@ -125,13 +128,16 @@ public class LoginFragment extends Fragment {
                                 loginResponse.setValue(value);
                                 loggingIn.setValue(false);
                                 loginFailed.setValue(false);
-                                navMyOrg();
-//                                Toast.makeText(getActivity(), "Logged in", Toast.LENGTH_SHORT).show();
+
+                                // Updating Shared Preferences
                                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Token", Context.MODE_PRIVATE);
                                 SharedPreferences.Editor storeToken = sharedPreferences.edit();
                                 storeToken.putString("access_token", value.getAccess_token());
                                 storeToken.putString("refresh_token", value.getRefresh_token());
                                 storeToken.commit();
+
+                                // Navigating to my org
+                                navProfile();
                             }
 
                             @Override
@@ -161,8 +167,8 @@ public class LoginFragment extends Fragment {
         fragmentTransaction.commit();
     }
 
-    public void navMyOrg(){
-        Fragment fragment = new MyOrgFragment();
+    public void navProfile(){
+        Fragment fragment = new ProfileFragment();
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.id_fragment_controller, fragment);

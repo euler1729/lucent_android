@@ -5,6 +5,7 @@ import java.util.List;
 
 import io.reactivex.Single;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
@@ -19,5 +20,9 @@ public interface OrgAPI {
 //    Login
     @POST("user/login")
     Single<LoginResponse> login(@Query("phone") String phone, @Query("password") String password);
+
+//    Get Profile Information
+    @GET("user/profile")
+    Single<User> getProfile(@Header("AUTHORIZATION") String bearerToken);
 
 }
