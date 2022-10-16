@@ -2,7 +2,6 @@ package com.example.lucent.view;
 
 import static androidx.databinding.DataBindingUtil.setContentView;
 
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,9 +10,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavAction;
-import androidx.navigation.NavDirections;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -21,29 +17,16 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.lucent.R;
 import com.example.lucent.adapter.TopOrgAdapter;
 import com.example.lucent.databinding.FragmentTopOrgBinding;
 import com.example.lucent.model.Organization;
 import com.example.lucent.viewmodel.TopOrgViewModel;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class TopOrgFragment extends Fragment implements TopOrgAdapter.ItemClickListener{
     String url = "http://ec2-3-17-67-232.us-east-2.compute.amazonaws.com:8080/org/published?page=0&size=10&sortBy=id";
@@ -79,7 +62,7 @@ public class TopOrgFragment extends Fragment implements TopOrgAdapter.ItemClickL
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(TopOrgViewModel.class);
-        viewModel.refresh();//->The line is problematic due to api call
+//        viewModel.refresh();//->The line is problematic due to api call
         recyclerView = binding.topOrgCards;
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         recyclerView.setAdapter(orgListAdapter);
@@ -87,7 +70,7 @@ public class TopOrgFragment extends Fragment implements TopOrgAdapter.ItemClickL
 //        getOrgList(url);
     }
     private void observeViewModel(){
-        viewModel.orgs.observe(getViewLifecycleOwner(), organizations -> {
+        viewModel.orgListLiveData.observe(getViewLifecycleOwner(), organizations -> {
             if(organizations != null && organizations instanceof List){
                 recyclerView.setVisibility(View.VISIBLE);
                 orgListAdapter.updateOrgList(organizations);

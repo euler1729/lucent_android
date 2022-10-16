@@ -3,24 +3,25 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        tools:ignore="MissingConstraints">
+        tools:ignore="MissingConstraints"
+        android:layout_marginBottom="5dp">
         <TextView
             android:id="@+id/id_table_descriptionTab"
             android:layout_width="116dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Description" />
 
         <TextView
             android:id="@+id/id_table_amountTab"
             android:layout_width="134dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Amount" />
         <TextView
@@ -30,6 +31,7 @@
             android:gravity="center"
             android:text="Time"/>
     </LinearLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

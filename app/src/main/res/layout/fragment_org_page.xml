@@ -114,15 +114,18 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:background="?android:attr/listDivider" />
+
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="349dp">
+
                 <LinearLayout
                     android:id="@+id/id_spending_table_header"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="#FFFFFF"
                     android:orientation="horizontal">
+
                     <TextView
                         android:id="@+id/id_table_description"
                         android:layout_width="116dp"
@@ -136,19 +139,20 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="Amount" />
+
                     <TextView
                         android:id="@+id/id_table_time"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="Time"/>
+                        android:text="Time" />
 
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/id_spending_table"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="329dp"
                     android:layout_below="@+id/id_spending_table_header"
                     tools:ignore="NestedScrolling" />
 
@@ -170,8 +174,8 @@
 
             <ListView
                 android:id="@+id/id_top_donations"
-                android:layout_width="408dp"
-                android:layout_height="188dp"
+                android:layout_width="match_parent"
+                android:layout_height="189dp"
                 android:layout_gravity="center"
                 tools:ignore="NestedScrolling" />
 

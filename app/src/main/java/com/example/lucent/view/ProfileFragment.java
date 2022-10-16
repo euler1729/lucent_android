@@ -1,5 +1,6 @@
 package com.example.lucent.view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,11 +23,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lucent.R;
+import com.example.lucent.databinding.FragmentDonorProfileBinding;
 import com.example.lucent.databinding.FragmentTopOrgBinding;
 import com.example.lucent.model.API;
 import com.example.lucent.model.LoginResponse;
 import com.example.lucent.model.User;
 import com.example.lucent.viewmodel.LoginViewModel;
+
+import java.util.Objects;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -34,17 +39,18 @@ import io.reactivex.schedulers.Schedulers;
 
 public class ProfileFragment extends Fragment {
 
-    TextView name, phone;
-    Button logOutBtn;
 
-
-    private FragmentTopOrgBinding binding;
+    private Navigator navigator = new Navigator();
+    private FragmentDonorProfileBinding binding;
     private View view;
     private final API api = new API();
     private final CompositeDisposable disposable = new CompositeDisposable();
-    private MutableLiveData<User> user = new MutableLiveData<>(new User());
-    private MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
-    private MutableLiveData<Boolean> loadingFailed = new MutableLiveData<>(false);
+    private final MutableLiveData<User> user = new MutableLiveData<>(new User());
+    private final MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
+    private final MutableLiveData<Boolean> loadingFailed = new MutableLiveData<>(false);
+    private TextView name;
+    private TextView phone;
+    private Button logOutBtn;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -62,23 +68,27 @@ public class ProfileFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    @SuppressLint("LongLogTag")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_top_org, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        String refresh_token = requireActivity().getSharedPreferences("Token", Context.MODE_PRIVATE).getString("refresh_token",null);
+//        Log.i("Refresh token at Profile: ","Refresh Token: "+refresh_token);
+        if(refresh_token==null){
+            navigator.navLogin(requireActivity());
+        }
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_donor_profile, container, false);
         view = binding.getRoot();
+        name = binding.profileName;
+        phone = binding.profilePhone;
+        logOutBtn = binding.logoutBtn;
         requireActivity().setTitle("Profile");
-
-        return inflater.inflate(R.layout.fragment_donor_profile, container, false);
+        return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        name = view.findViewById(R.id.profile_name);
-        phone = view.findViewById(R.id.profile_phone);
-        logOutBtn = view.findViewById(R.id.logout_btn);
         getProfile();
-
         logOutBtn.setOnClickListener(View->{
             logOut();
         });
@@ -86,7 +96,7 @@ public class ProfileFragment extends Fragment {
 
     public void getProfile() {
         loading.setValue(true);
-        SharedPreferences token = getActivity().getSharedPreferences("Token", Context.MODE_PRIVATE);
+        SharedPreferences token = requireActivity().getSharedPreferences("Token", Context.MODE_PRIVATE);
         String accessToken = token.getString("access_token", "Token Here");
 
 
@@ -105,27 +115,29 @@ public class ProfileFragment extends Fragment {
 //                                updateMenuTitles("Profile");
 
                                 // Updating Shared Preferences
-                                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Token", Context.MODE_PRIVATE);
+                                SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("Token", Context.MODE_PRIVATE);
                                 SharedPreferences.Editor storeToken = sharedPreferences.edit();
                                 storeToken.putString("name", value.getName());
                                 storeToken.putString("phone", value.getPhone());
-                                storeToken.commit();
+                                storeToken.apply();
 
                                 // Update menu items
                                 MenuItem bedMenuItem = MainActivity.menu.findItem(R.id.id_action_login);
-                                bedMenuItem.setTitle(user.getValue().getName());
+                                bedMenuItem.setTitle(Objects.requireNonNull(user.getValue()).getName());
 
                                 // Updating Page
                                 name.setText(user.getValue().getName());
                                 phone.setText(user.getValue().getPhone());
+//                                navHome();
                             }
 
                             @Override
                             public void onError(Throwable e) {
                                 loadingFailed.setValue(true);
                                 loading.setValue(false);
-                                Toast.makeText(getActivity(), "Information Fetch Failed", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(getActivity(), "Information Fetch Failed", Toast.LENGTH_SHORT).show();
                                 e.printStackTrace();
+                                navLogin();
                             }
                         })
         );
@@ -133,11 +145,11 @@ public class ProfileFragment extends Fragment {
 
     public void logOut(){
         // Updating Shared Preferences
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Token", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("Token", Context.MODE_PRIVATE);
         SharedPreferences.Editor storeToken = sharedPreferences.edit();
         storeToken.putString("access_token", null);
         storeToken.putString("refresh_token", null);
-        storeToken.commit();
+        storeToken.apply();
 
         // Update menu items
         MenuItem bedMenuItem = MainActivity.menu.findItem(R.id.id_action_login);
@@ -145,14 +157,23 @@ public class ProfileFragment extends Fragment {
 
         navHome();
     }
-
+    //Navigates to home
     public void navHome(){
         Fragment fragment = new HomeFragment();
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.id_fragment_controller, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+    }
+    //navigates to login
+    public void navLogin(){
+        requireActivity()
+                .getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.id_fragment_controller,new LoginFragment())
+                .addToBackStack(null)
+                .commit();
     }
 
 }

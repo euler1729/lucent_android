@@ -4,70 +4,53 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.NavigationUI;
-
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
-import android.widget.Toolbar;
-
 import com.example.lucent.R;
-import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
-
 
 public class MainActivity extends AppCompatActivity {
-    NavController controller;
-
-    @SuppressLint({"WrongViewCast", "MissingInflatedId"})
+    public static Menu menu;
+    Fragment selectedFragment;
+    Navigator navigator = new Navigator();
+    @SuppressLint({"WrongViewCast", "MissingInflatedId", "NonConstantResourceId"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.id_fragment_controller);
-        assert navHostFragment != null;
-        controller = navHostFragment.getNavController();
-        NavigationUI.setupWithNavController(bottomNavigationView, controller);
-//        try{
-//            bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-//                @SuppressLint("NonConstantResourceId")
-//                @Override
-//                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//                    Fragment selectedFragment;
-//                    switch(item.getItemId()){
-//                        case R.id.homeFragment:
-//                            selectedFragment = new HomeFragment();
-//                            break;
-//                        case R.id.myOrgFragment:
-//                            selectedFragment = new MyOrgFragment();
-//                            break;
-//                        case R.id.ProfileFragment:
-//                            selectedFragment = new ProfileFragment();
-//                            break;
-//                        default:
-//                            selectedFragment = null;
-//                            break;
-//                    }
-//                    assert selectedFragment != null;
-//                    getSupportFragmentManager().beginTransaction().replace(R.id.id_fragment_controller,selectedFragment).commit();
-//                    return true;
-//                }
-//            });
-//        }catch (Exception exp){
-//            exp.getMessage();
-//            exp.getStackTrace();
-//        }
-//        toolbar = findViewById();
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.id_fragment_controller,new HomeFragment()).commit();
+        try{
+            bottomNavigationView.setOnItemSelectedListener(item -> {
+                switch(item.getItemId()){
+                    case R.id.homeFragment:
+                        selectedFragment = new HomeFragment();
+                        break;
+                    case R.id.myOrgFragment:
+                        selectedFragment = new MyOrgFragment();
+                        break;
+                    case R.id.ProfileFragment:
+                        selectedFragment = new ProfileFragment();
+                        break;
+                    default:
+                        selectedFragment = null;
+                        break;
+                }
+                assert selectedFragment != null;
+                getSupportFragmentManager().beginTransaction().replace(R.id.id_fragment_controller,selectedFragment).commit();
+                return true;
+            });
+        }catch (Exception exp){
+            exp.getStackTrace();
+        }
     }
 
     @Override
@@ -79,37 +62,32 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.actionbar_menu,menu);
+        MainActivity.menu = menu;
+        updateMenuTitles();
         return true;
     }
 
-    @SuppressLint("NonConstantResourceId")
+    public void updateMenuTitles() {
+        MenuItem bedMenuItem = menu.findItem(R.id.id_action_login);
+        SharedPreferences token = this.getSharedPreferences("Token", Context.MODE_PRIVATE);
+        String refreshToken = token.getString("refresh_token", null);
+
+
+        if(refreshToken == null){
+            bedMenuItem.setTitle("Login");
+        }
+        else{
+            bedMenuItem.setTitle(token.getString("name", ""));
+        }
+    }
+
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        Fragment selectedFragment;
-        switch(id){
-            case R.id.homeFragment:
-                selectedFragment = new HomeFragment();
-                break;
-            case R.id.myOrgFragment:
-                selectedFragment = new MyOrgFragment();
-                break;
-            case R.id.ProfileFragment:
-                selectedFragment = new ProfileFragment();
-                break;
-            case R.id.id_action_login:
-                selectedFragment = new LoginFragment();
-                break;
-            default:
-                selectedFragment = null;
-                break;
+        if (id == R.id.id_action_login) {
+            navigator.navLogin(this);
         }
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.id_fragment_controller,selectedFragment,"navigate")
-                .addToBackStack(null)
-                .commit();
-
         return super.onOptionsItemSelected(item);
     }
 

@@ -1,66 +1,59 @@
 package com.example.lucent.view;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.lucent.R;
+import com.example.lucent.databinding.FragmentMyOrgBinding;
+import com.example.lucent.viewmodel.MyOrgViewModel;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link MyOrgFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class MyOrgFragment extends Fragment {
+    private View view;
+    private MyOrgViewModel viewModel;
+    private FragmentMyOrgBinding binding;
+    private RecyclerView recyclerView;
+    private TextView err;
+    private ProgressBar progressBar;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public MyOrgFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MyOrgFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static MyOrgFragment newInstance(String param1, String param2) {
-        MyOrgFragment fragment = new MyOrgFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         requireActivity().setTitle("My Organizations");
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_org, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_org, container,false);
+        view = binding.getRoot();
+        err = binding.idErrorMessage;
+        recyclerView = binding.topOrgCards;
+        progressBar = binding.idLoadingProgressbar;
+        return view;
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        String refresh_token = requireActivity().getSharedPreferences("Token", Context.MODE_PRIVATE).getString("refresh_token",null);
+        String access_token = requireActivity().getSharedPreferences("Token", Context.MODE_PRIVATE).getString("refresh_token",null);
+        if(refresh_token==null || access_token==null){
+            err.setText("Please Login to see your subscribed Organizations.");
+            err.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.GONE);
+        }
     }
 }

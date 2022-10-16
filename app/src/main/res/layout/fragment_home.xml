@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout >
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fragment_home"
     android:transitionName="Home"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.HomeFragment">
@@ -62,18 +63,18 @@
 
             <TextView
                 android:id="@+id/id_error_message"
-                android:layout_width="271dp"
-                android:layout_height="30dp"
+                android:layout_width="303dp"
+                android:layout_height="116dp"
+                android:gravity="center"
+                android:text="Something went wrong!\nPlease refresh to reload."
                 android:textColor="#C73E3E"
-                android:visibility="gone"
-                android:text="Something went wrong while fetching data!"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/id_top_org_linear"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     </RelativeLayout>
 

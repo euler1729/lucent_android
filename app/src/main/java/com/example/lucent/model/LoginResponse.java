@@ -1,5 +1,7 @@
 package com.example.lucent.model;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 public class LoginResponse {
@@ -8,6 +10,7 @@ public class LoginResponse {
     @SerializedName("access_token")
     String access_token;
 
+    @NonNull
     @Override
     public String toString() {
         return "LoginResponse{" +

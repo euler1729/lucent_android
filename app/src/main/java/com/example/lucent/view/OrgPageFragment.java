@@ -67,6 +67,7 @@ public class OrgPageFragment extends Fragment {
         view = binding.getRoot();
         binding.idOrgpageOrgName.setText(organization.getName());
         binding.idOrgpageBalance.setText("Balance: "+Integer.toString(organization.getBalance()));
+        spendingTable = binding.idSpendingTable;
         spendingTableAdapter = new SpendingTableAdapter(new ArrayList<>());
         Picasso.get().load(organization.getProfilePicURL()).into(binding.idOrgpageProfilepic);
         Picasso.get().load(organization.getCoverPicURL()).into(binding.idOrgpageCover);
@@ -78,7 +79,6 @@ public class OrgPageFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(OrgPageViewModel.class);
         viewModel.refresh("spending/latest/" + organization.getId());
-        spendingTable = binding.idSpendingTable;
         spendingTable.setLayoutManager(new LinearLayoutManager(requireContext()));
         spendingTable.setAdapter(spendingTableAdapter);
         observeViewModel();

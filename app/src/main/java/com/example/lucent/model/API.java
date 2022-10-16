@@ -23,19 +23,18 @@ public class API{
                 .build()
                 .create(OrgAPI.class);
     }
+    //Get Top Organizations for Home
     public Single<List<Organization>> getOrgs(){
         return orgAPI.getOrgs();
     }
+    //Gets Organization details
     public Single<List<Spending>>getSpendings(@Url String url){
         return orgAPI.getSpendings(url);
     }
-
-//    Login
+    //Login
     public Single<LoginResponse> login(@Query("phone") String phone, @Query("password") String password){ return orgAPI.login(phone, password); }
-
-//    Get Profile
+    //Get Profile
     public Single<User> getProfile(@Header("AUTHORIZATION") String bearerToken){ return orgAPI.getProfile(bearerToken);};
-
-//    Registration
+    //Registration
     public Single<User> register(@Body RegisterRequest registerRequest) { return orgAPI.register(registerRequest); }
 }
