@@ -82,18 +82,34 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.id_action_login) {
-            Toast.makeText(this,"Login Button Clicked!",Toast.LENGTH_SHORT).show();
-            Fragment fragment = new LoginFragment();
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.id_fragment_controller,fragment,"fragment_org_page")
-                    .addToBackStack(null)
-                    .commit();
+        Fragment selectedFragment;
+        switch(id){
+            case R.id.homeFragment:
+                selectedFragment = new HomeFragment();
+                break;
+            case R.id.myOrgFragment:
+                selectedFragment = new MyOrgFragment();
+                break;
+            case R.id.ProfileFragment:
+                selectedFragment = new ProfileFragment();
+                break;
+            case R.id.id_action_login:
+                selectedFragment = new LoginFragment();
+                break;
+            default:
+                selectedFragment = null;
+                break;
         }
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.id_fragment_controller,selectedFragment,"navigate")
+                .addToBackStack(null)
+                .commit();
+
         return super.onOptionsItemSelected(item);
     }
 

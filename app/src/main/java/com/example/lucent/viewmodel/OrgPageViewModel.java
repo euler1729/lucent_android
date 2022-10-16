@@ -42,6 +42,9 @@ public class OrgPageViewModel extends AndroidViewModel {
                             @Override
                             public void onSuccess(List<Spending> value) {
                                 spendingLiveData.setValue(value);
+                                for(Spending s:value){
+                                    Log.i("desc: ",s.getDescription());
+                                }
                             }
 
                             @Override
@@ -50,6 +53,11 @@ public class OrgPageViewModel extends AndroidViewModel {
                             }
                         })
         );
+    }
 
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        disposable.clear();
     }
 }

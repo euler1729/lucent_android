@@ -38,7 +38,7 @@ public class TopOrgViewModel extends AndroidViewModel {
     String url = "http://ec2-3-17-67-232.us-east-2.compute.amazonaws.com:8080/org/published?page=0&size=10&sortBy=id";
 
     public MutableLiveData<List<Organization>> orgs = new MutableLiveData<List<Organization>>();
-    ArrayList<Organization> orgList = new ArrayList<Organization>();
+//    ArrayList<Organization> orgList = new ArrayList<Organization>();
     public MutableLiveData<Boolean> orgLoadErr = new MutableLiveData<Boolean>(true);
     public MutableLiveData<Boolean> loading = new MutableLiveData<Boolean>(true);
 

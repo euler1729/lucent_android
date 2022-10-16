@@ -8,6 +8,8 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,13 +19,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.lucent.R;
+import com.example.lucent.adapter.SpendingTableAdapter;
 import com.example.lucent.databinding.FragmentOrgPageBinding;
 import com.example.lucent.databinding.FragmentOrgPageBindingImpl;
 import com.example.lucent.model.Organization;
+import com.example.lucent.model.Spending;
 import com.example.lucent.viewmodel.OrgPageViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 public class OrgPageFragment extends Fragment {
 
@@ -32,6 +38,9 @@ public class OrgPageFragment extends Fragment {
     private OrgPageViewModel viewModel;
     private static final String NAME = "param1";
     private static Organization organization;
+    private SpendingTableAdapter spendingTableAdapter;
+    private RecyclerView spendingTable;
+
 
     public OrgPageFragment() {
     }
@@ -58,6 +67,7 @@ public class OrgPageFragment extends Fragment {
         view = binding.getRoot();
         binding.idOrgpageOrgName.setText(organization.getName());
         binding.idOrgpageBalance.setText("Balance: "+Integer.toString(organization.getBalance()));
+        spendingTableAdapter = new SpendingTableAdapter(new ArrayList<>());
         Picasso.get().load(organization.getProfilePicURL()).into(binding.idOrgpageProfilepic);
         Picasso.get().load(organization.getCoverPicURL()).into(binding.idOrgpageCover);
         return view;
@@ -67,6 +77,15 @@ public class OrgPageFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(OrgPageViewModel.class);
-        viewModel.refresh("spending/latest/"+organization.getId());
+        viewModel.refresh("spending/latest/" + organization.getId());
+        spendingTable = binding.idSpendingTable;
+        spendingTable.setLayoutManager(new LinearLayoutManager(requireContext()));
+        spendingTable.setAdapter(spendingTableAdapter);
+        observeViewModel();
+    }
+    private void observeViewModel(){
+        viewModel.spendingLiveData.observe(getViewLifecycleOwner(),spending -> {
+            spendingTableAdapter.updateSpendingList(spending);
+        });
     }
 }
