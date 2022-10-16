@@ -2,25 +2,31 @@ package com.example.lucent.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class User {
+public class RegisterRequest {
     @SerializedName("name")
     String name;
     @SerializedName("phone")
     String phone;
-    @SerializedName("verified")
-    Boolean verified;
+    @SerializedName("password")
+    String password;
+
+    public RegisterRequest(String name, String phone, String password){
+        this.name = name;
+        this.password = password;
+        this.phone = phone;
+    }
 
     @Override
     public String toString() {
         return "User{" +
                 "name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
-                ", verified=" + verified +
+                ", password=" + password +
                 '}';
     }
 
-    public Boolean getVerified() {
-        return verified;
+    public String getPassword() {
+        return password;
     }
 
     public String getName() {

@@ -6,6 +6,9 @@ import io.reactivex.Single;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Body;
+import retrofit2.http.Header;
+import retrofit2.http.Query;
 import retrofit2.http.Url;
 
 public class API{
@@ -26,4 +29,13 @@ public class API{
     public Single<List<Spending>>getSpendings(@Url String url){
         return orgAPI.getSpendings(url);
     }
+
+//    Login
+    public Single<LoginResponse> login(@Query("phone") String phone, @Query("password") String password){ return orgAPI.login(phone, password); }
+
+//    Get Profile
+    public Single<User> getProfile(@Header("AUTHORIZATION") String bearerToken){ return orgAPI.getProfile(bearerToken);};
+
+//    Registration
+    public Single<User> register(@Body RegisterRequest registerRequest) { return orgAPI.register(registerRequest); }
 }
