@@ -11,11 +11,11 @@ import retrofit2.http.Header;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
 
-public class API{
+public class API {
     private static final String BASE_URL = "http://ec2-3-17-67-232.us-east-2.compute.amazonaws.com:8080/";
-    private OrgAPI orgAPI;
+    private final OrgAPI orgAPI;
 
-    public API(){
+    public API() {
         orgAPI = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -23,18 +23,29 @@ public class API{
                 .build()
                 .create(OrgAPI.class);
     }
+
     //Get Top Organizations for Home
-    public Single<List<Organization>> getOrgs(){
+    public Single<List<Organization>> getOrgs() {
         return orgAPI.getOrgs();
     }
     //Gets Organization details
-    public Single<List<Spending>>getSpendings(@Url String url){
+    public Single<List<Spending>> getSpendings(@Url String url) {
         return orgAPI.getSpendings(url);
     }
     //Login
-    public Single<LoginResponse> login(@Query("phone") String phone, @Query("password") String password){ return orgAPI.login(phone, password); }
+    public Single<LoginResponse> login(@Query("phone") String phone, @Query("password") String password) {
+        return orgAPI.login(phone, password);
+    }
     //Get Profile
-    public Single<User> getProfile(@Header("AUTHORIZATION") String bearerToken){ return orgAPI.getProfile(bearerToken);};
+    public Single<User> getProfile(@Header("AUTHORIZATION") String bearerToken) {
+        return orgAPI.getProfile(bearerToken);
+    }
     //Registration
-    public Single<User> register(@Body RegisterRequest registerRequest) { return orgAPI.register(registerRequest); }
+    public Single<User> register(@Body RegisterRequest registerRequest) {
+        return orgAPI.register(registerRequest);
+    }
+    //Gets myOrganizations
+    public Single<List<Organization>> getMyOrgs(@Header("AUTHORIZATION") String bearerToken) {
+        return orgAPI.getMyOrgs(bearerToken);
+    }
 }

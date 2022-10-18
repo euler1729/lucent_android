@@ -35,8 +35,8 @@
     <View
         android:id="@+id/divider2"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:backgroundTint="@color/black"
+        android:layout_height="2dp"
+        android:backgroundTint="@color/teal_700"
         android:forceDarkAllowed="true"
         android:background="?android:attr/listDivider" />
 </TableLayout>

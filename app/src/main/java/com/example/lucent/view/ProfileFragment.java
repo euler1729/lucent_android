@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
@@ -41,6 +42,7 @@ public class ProfileFragment extends Fragment {
 
 
     private Navigator navigator = new Navigator();
+    private FragmentActivity activity;
     private FragmentDonorProfileBinding binding;
     private View view;
     private final API api = new API();
@@ -51,6 +53,7 @@ public class ProfileFragment extends Fragment {
     private TextView name;
     private TextView phone;
     private Button logOutBtn;
+
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -72,16 +75,16 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         String refresh_token = requireActivity().getSharedPreferences("Token", Context.MODE_PRIVATE).getString("refresh_token",null);
-//        Log.i("Refresh token at Profile: ","Refresh Token: "+refresh_token);
+        activity = requireActivity();
         if(refresh_token==null){
-            navigator.navLogin(requireActivity());
+            navigator.navLogin(activity);
         }
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_donor_profile, container, false);
         view = binding.getRoot();
         name = binding.profileName;
         phone = binding.profilePhone;
         logOutBtn = binding.logoutBtn;
-        requireActivity().setTitle("Profile");
+        activity.setTitle("Profile");
         return view;
     }
 
@@ -96,7 +99,7 @@ public class ProfileFragment extends Fragment {
 
     public void getProfile() {
         loading.setValue(true);
-        SharedPreferences token = requireActivity().getSharedPreferences("Token", Context.MODE_PRIVATE);
+        SharedPreferences token = activity.getSharedPreferences("Token", Context.MODE_PRIVATE);
         String accessToken = token.getString("access_token", "Token Here");
 
 
@@ -115,7 +118,7 @@ public class ProfileFragment extends Fragment {
 //                                updateMenuTitles("Profile");
 
                                 // Updating Shared Preferences
-                                SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("Token", Context.MODE_PRIVATE);
+                                SharedPreferences sharedPreferences = activity.getSharedPreferences("Token", Context.MODE_PRIVATE);
                                 SharedPreferences.Editor storeToken = sharedPreferences.edit();
                                 storeToken.putString("name", value.getName());
                                 storeToken.putString("phone", value.getPhone());
@@ -137,7 +140,7 @@ public class ProfileFragment extends Fragment {
                                 loading.setValue(false);
 //                                Toast.makeText(getActivity(), "Information Fetch Failed", Toast.LENGTH_SHORT).show();
                                 e.printStackTrace();
-                                navLogin();
+                                navigator.navLogin(activity);
                             }
                         })
         );
@@ -145,7 +148,7 @@ public class ProfileFragment extends Fragment {
 
     public void logOut(){
         // Updating Shared Preferences
-        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("Token", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = activity.getSharedPreferences("Token", Context.MODE_PRIVATE);
         SharedPreferences.Editor storeToken = sharedPreferences.edit();
         storeToken.putString("access_token", null);
         storeToken.putString("refresh_token", null);
@@ -155,25 +158,7 @@ public class ProfileFragment extends Fragment {
         MenuItem bedMenuItem = MainActivity.menu.findItem(R.id.id_action_login);
         bedMenuItem.setTitle("Login");
 
-        navHome();
-    }
-    //Navigates to home
-    public void navHome(){
-        Fragment fragment = new HomeFragment();
-        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.id_fragment_controller, fragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-    }
-    //navigates to login
-    public void navLogin(){
-        requireActivity()
-                .getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.id_fragment_controller,new LoginFragment())
-                .addToBackStack(null)
-                .commit();
+        navigator.navHome(activity);
     }
 
 }

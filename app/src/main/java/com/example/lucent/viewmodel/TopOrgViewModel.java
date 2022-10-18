@@ -16,7 +16,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class TopOrgViewModel extends AndroidViewModel {
     public MutableLiveData<List<Organization>> orgListLiveData = new MutableLiveData<>();
-    public MutableLiveData<Boolean> orgLoadErr = new MutableLiveData<>(true);
+    public MutableLiveData<Boolean> orgLoadErr = new MutableLiveData<>(false);
     public MutableLiveData<Boolean> loading = new MutableLiveData<>(true);
 
     private final API api = new API();

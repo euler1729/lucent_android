@@ -87,12 +87,12 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ScrollView
-        android:layout_width="408dp"
-        android:layout_height="432dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="0dp">
+        tools:ignore="MissingConstraints">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -103,8 +103,9 @@
             <TextView
                 android:layout_width="244dp"
                 android:layout_height="match_parent"
+                android:fontFamily="@font/acme"
                 android:gravity="center"
-                android:text="Spending" />
+                android:text="Spendings" />
 
             <View
                 android:id="@+id/divider"
@@ -117,13 +118,15 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="349dp">
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:id="@+id/id_spending_table_header"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#FFFFFF"
+                    android:background="#673AB7"
+                    android:backgroundTint="@color/teal_700"
+                    android:isScrollContainer="false"
                     android:orientation="horizontal">
 
                     <TextView
@@ -152,33 +155,45 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/id_spending_table"
                     android:layout_width="match_parent"
-                    android:layout_height="329dp"
+                    android:layout_height="wrap_content"
                     android:layout_below="@+id/id_spending_table_header"
+                    android:padding="5dp"
                     tools:ignore="NestedScrolling" />
 
             </RelativeLayout>
 
-            <TextView
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Top Donators" />
+                android:layout_height="wrap_content">
 
-            <View
-                android:layout_width="200dp"
-                android:layout_height="3dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:background="?android:attr/listDivider" />
+                <LinearLayout
+                    android:id="@+id/id_latest_donation_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-            <ListView
-                android:id="@+id/id_top_donations"
-                android:layout_width="match_parent"
-                android:layout_height="189dp"
-                android:layout_gravity="center"
-                tools:ignore="NestedScrolling" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/acme"
+                        android:gravity="center"
+                        android:text="Latest Donations" />
 
+                    <View
+                        android:layout_width="200dp"
+                        android:layout_height="3dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="?android:attr/listDivider" />
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/id_latest_donation_header"/>
+            </RelativeLayout>
         </LinearLayout>
 
 

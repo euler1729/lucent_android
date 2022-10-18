@@ -8,7 +8,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,17 +21,22 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.lucent.R;
+import com.example.lucent.adapter.OrgAdapter;
 import com.example.lucent.databinding.FragmentMyOrgBinding;
+import com.example.lucent.model.Organization;
 import com.example.lucent.viewmodel.MyOrgViewModel;
 
-public class MyOrgFragment extends Fragment {
+import java.util.ArrayList;
+
+public class MyOrgFragment extends Fragment implements OrgAdapter.ItemClickListener{
     private View view;
     private MyOrgViewModel viewModel;
     private FragmentMyOrgBinding binding;
     private RecyclerView recyclerView;
     private TextView err;
     private ProgressBar progressBar;
-
+    private OrgAdapter orgAdapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     public MyOrgFragment() {
     }
@@ -40,6 +49,8 @@ public class MyOrgFragment extends Fragment {
         err = binding.idErrorMessage;
         recyclerView = binding.topOrgCards;
         progressBar = binding.idLoadingProgressbar;
+        swipeRefreshLayout = binding.fragmentMyOrg;
+        orgAdapter = new OrgAdapter(new ArrayList<>(),this);
         return view;
     }
 
@@ -54,6 +65,64 @@ public class MyOrgFragment extends Fragment {
             err.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
             recyclerView.setVisibility(View.GONE);
+        }
+        else{
+            recyclerView = binding.topOrgCards;
+            progressBar.setVisibility(View.VISIBLE);
+            viewModel = new ViewModelProvider(this).get(MyOrgViewModel.class);
+            viewModel.refresh(requireActivity());
+            recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+            recyclerView.setAdapter(orgAdapter);
+            observeViewModel();
+        }
+        swipeRefreshLayout.setOnRefreshListener(()->{
+            recyclerView.setVisibility(View.GONE);
+            err.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
+            viewModel.refresh(requireActivity());
+            swipeRefreshLayout.setRefreshing(false);
+        });
+    }
+    @SuppressLint("SetTextI18n")
+    private void observeViewModel(){
+        viewModel.orgListLiveData.observe(getViewLifecycleOwner(),organizations -> {
+            if (organizations != null) {
+                err.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
+                orgAdapter.updateOrgList(organizations);
+                recyclerView.setVisibility(View.VISIBLE);
+            }
+        });
+        viewModel.orgLoadErr.observe(getViewLifecycleOwner(),loadErr->{
+            if(loadErr!=null){
+                if(loadErr){
+                    recyclerView.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.GONE);
+                    err.setText("Refresh please to load.");
+                    err.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        viewModel.loading.observe(getViewLifecycleOwner(),isLoading->{
+            if(isLoading!=null){
+                if(isLoading){
+                    recyclerView.setVisibility(View.GONE);
+                    err.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+    }
+    @Override
+    public void onItemClick(Organization organization) {
+        try {
+            Fragment fragment = OrgPageFragment.newInstance(organization);
+            FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.id_fragment_controller,fragment,"fragment_org_page");
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 }

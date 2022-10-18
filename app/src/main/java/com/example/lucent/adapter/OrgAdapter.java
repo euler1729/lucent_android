@@ -3,7 +3,6 @@ package com.example.lucent.adapter;
 import androidx.annotation.NonNull;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.LayoutInflater;
@@ -18,11 +17,11 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class TopOrgAdapter extends RecyclerView.Adapter<TopOrgAdapter.ViewHolder> {
+public class OrgAdapter extends RecyclerView.Adapter<OrgAdapter.ViewHolder> {
     private final ArrayList<Organization> orgModelArrayList;
     public ItemClickListener clickListener;
     //Constructor
-    public TopOrgAdapter(ArrayList<Organization> orgModelArrayList,ItemClickListener clickListener) {
+    public OrgAdapter(ArrayList<Organization> orgModelArrayList, ItemClickListener clickListener) {
         this.orgModelArrayList = orgModelArrayList;
         this.clickListener = clickListener;
     }
@@ -34,7 +33,7 @@ public class TopOrgAdapter extends RecyclerView.Adapter<TopOrgAdapter.ViewHolder
     }
     @NonNull
     @Override
-    public TopOrgAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public OrgAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // to inflate the layout for each item of recycler view.
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.orgcard_layout, parent, false);
         return new ViewHolder(view);
@@ -42,7 +41,7 @@ public class TopOrgAdapter extends RecyclerView.Adapter<TopOrgAdapter.ViewHolder
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull TopOrgAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
+    public void onBindViewHolder(@NonNull OrgAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         // to set data to textview and imageview of each card layout
         int rank = position+1;
         Organization org = orgModelArrayList.get(position);

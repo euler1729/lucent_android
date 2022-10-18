@@ -32,4 +32,8 @@ public interface OrgAPI {
     @HTTP(method = "POST", path = "user/registration", hasBody = true)
     Single<User> register(@Body RegisterRequest registerRequest);
 
+    //Gets subscribed organizations
+    @GET("org/my")
+    Single<List<Organization>>getMyOrgs(@Header("AUTHORIZATION") String bearerToken);
+
 }

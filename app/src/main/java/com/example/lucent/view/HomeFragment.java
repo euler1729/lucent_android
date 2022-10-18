@@ -18,18 +18,18 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.example.lucent.R;
-import com.example.lucent.adapter.TopOrgAdapter;
+import com.example.lucent.adapter.OrgAdapter;
 import com.example.lucent.databinding.FragmentHomeBinding;
 import com.example.lucent.model.Organization;
 import com.example.lucent.viewmodel.TopOrgViewModel;
 import java.util.ArrayList;
 
-public class HomeFragment extends Fragment implements TopOrgAdapter.ItemClickListener{
+public class HomeFragment extends Fragment implements OrgAdapter.ItemClickListener{
     private View view;
     private TopOrgViewModel viewModel;
     private RecyclerView recyclerView;
     private FragmentHomeBinding binding;
-    private TopOrgAdapter orgListAdapter;
+    private OrgAdapter orgListAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ProgressBar progressBar;
     private TextView errTextView;
@@ -56,7 +56,7 @@ public class HomeFragment extends Fragment implements TopOrgAdapter.ItemClickLis
         swipeRefreshLayout = binding.fragmentHome;
         progressBar = binding.idLoadingProgressbar;
         errTextView = binding.idErrorMessage;
-        orgListAdapter = new TopOrgAdapter(new ArrayList<>(), this);
+        orgListAdapter = new OrgAdapter(new ArrayList<>(), this);
 
         return view;
     }

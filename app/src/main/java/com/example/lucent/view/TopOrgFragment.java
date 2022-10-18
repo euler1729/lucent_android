@@ -20,7 +20,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.example.lucent.R;
-import com.example.lucent.adapter.TopOrgAdapter;
+import com.example.lucent.adapter.OrgAdapter;
 import com.example.lucent.databinding.FragmentTopOrgBinding;
 import com.example.lucent.model.Organization;
 import com.example.lucent.viewmodel.TopOrgViewModel;
@@ -28,11 +28,11 @@ import com.example.lucent.viewmodel.TopOrgViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TopOrgFragment extends Fragment implements TopOrgAdapter.ItemClickListener{
+public class TopOrgFragment extends Fragment implements OrgAdapter.ItemClickListener{
     String url = "http://ec2-3-17-67-232.us-east-2.compute.amazonaws.com:8080/org/published?page=0&size=10&sortBy=id";
     private FragmentTopOrgBinding binding;
     private View view;
-    private TopOrgAdapter orgListAdapter;
+    private OrgAdapter orgListAdapter;
 
     private TopOrgViewModel viewModel;
     private RecyclerView recyclerView;
@@ -53,7 +53,7 @@ public class TopOrgFragment extends Fragment implements TopOrgAdapter.ItemClickL
         view = binding.getRoot();
         swipeRefreshLayout = view.findViewById(R.id.id_top_org_swipe);
         progressBar = binding.idLoadingProgressbar2;
-        orgListAdapter = new TopOrgAdapter(new ArrayList<>(), this);
+        orgListAdapter = new OrgAdapter(new ArrayList<>(), this);
         requireActivity().setTitle("Top Organizations");
         return view;
     }
@@ -119,7 +119,7 @@ public class TopOrgFragment extends Fragment implements TopOrgAdapter.ItemClickL
 
     //Inserts Organizations list into Card adapter
     private void buildRecycleView(ArrayList<Organization>orgList){
-        orgListAdapter = new TopOrgAdapter(orgList,this);
+        orgListAdapter = new OrgAdapter(orgList,this);
         recyclerView.setAdapter(orgListAdapter);
         progressBar.setVisibility(View.GONE);
     }
