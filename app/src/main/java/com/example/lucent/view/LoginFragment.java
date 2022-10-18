@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
@@ -35,10 +36,11 @@ import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public class LoginFragment extends Fragment {
-    private Navigator navigator=new Navigator();
+    private final Navigator navigator=new Navigator();
     private LoginViewModel loginViewModel;
     private FragmentLoginBinding binding;
     private View view;
+    private FragmentActivity activity;
     private String phone=null;
     private String password=null;
     private EditText loginPhone;
@@ -46,13 +48,7 @@ public class LoginFragment extends Fragment {
     private Button loginBtn, registerBtn;
 
     public LoginFragment() {
-        // Required empty public constructor
-    }
-    public static LoginFragment newInstance(String param1, String param2) {
-        LoginFragment fragment = new LoginFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
+
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,11 +56,12 @@ public class LoginFragment extends Fragment {
     }
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        SharedPreferences token = requireActivity().getSharedPreferences("Token", Context.MODE_PRIVATE);
+        activity = requireActivity();
+        SharedPreferences token = activity.getSharedPreferences("Token", Context.MODE_PRIVATE);
         String refreshToken = token.getString("refresh_token", null);
         if(refreshToken != null){
-            Toast.makeText(requireActivity(),"You're logged in!",Toast.LENGTH_SHORT).show();
-            navigator.navProfile(requireActivity());
+            Toast.makeText(activity,"You're logged in!",Toast.LENGTH_SHORT).show();
+            navigator.navProfile(activity);
         }
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container,false);
         view = binding.getRoot();
@@ -72,7 +69,7 @@ public class LoginFragment extends Fragment {
         loginPassword =binding.loginPassword;
         loginBtn = binding.loginBtn;
         registerBtn = binding.loginRegisterBtn;
-        requireActivity().setTitle("Login");
+        activity.setTitle("Login");
         return view;
     }
 
@@ -86,14 +83,14 @@ public class LoginFragment extends Fragment {
             password = String.valueOf(loginPassword.getText());
             if(phone.length()!=0 && password.length()!=0){
                 loginBtn.setText("Logging in");
-                loginViewModel.login(phone,password,requireActivity());
+                loginViewModel.login(phone,password,activity);
             }
             else{
-                Toast.makeText(requireActivity(), "Phone Number or Password can't be empty!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, "Phone Number or Password can't be empty!", Toast.LENGTH_SHORT).show();
             }
         });
         registerBtn.setOnClickListener(View->{
-            navigator.navDonorRegister(requireActivity());
+            navigator.navDonorRegister(activity);
         });
         observeViewModel();
     }

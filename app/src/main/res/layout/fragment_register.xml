@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.RegisterFragment">
@@ -28,7 +29,8 @@
         android:hint="Name"
         android:inputType="textPersonName"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        tools:ignore="TouchTargetSizeCheck" />
 
     <EditText
         android:id="@+id/registration_phone"
@@ -40,7 +42,8 @@
         android:hint="Phone"
         android:inputType="textPersonName"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registration_name" />
+        app:layout_constraintTop_toBottomOf="@+id/registration_name"
+        tools:ignore="TouchTargetSizeCheck" />
 
     <EditText
         android:id="@+id/registration_password"
@@ -52,7 +55,8 @@
         android:hint="Password"
         android:inputType="textPassword"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registration_phone" />
+        app:layout_constraintTop_toBottomOf="@+id/registration_phone"
+        tools:ignore="TouchTargetSizeCheck" />
 
     <Button
         android:id="@+id/registration_btn"
@@ -86,3 +90,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/registration_btn" />
 </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

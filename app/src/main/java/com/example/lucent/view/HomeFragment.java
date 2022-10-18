@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,12 +22,13 @@ import com.example.lucent.R;
 import com.example.lucent.adapter.OrgAdapter;
 import com.example.lucent.databinding.FragmentHomeBinding;
 import com.example.lucent.model.Organization;
-import com.example.lucent.viewmodel.TopOrgViewModel;
+import com.example.lucent.viewmodel.HomeViewModel;
 import java.util.ArrayList;
 
 public class HomeFragment extends Fragment implements OrgAdapter.ItemClickListener{
+    private FragmentActivity activity;
     private View view;
-    private TopOrgViewModel viewModel;
+    private HomeViewModel viewModel;
     private RecyclerView recyclerView;
     private FragmentHomeBinding binding;
     private OrgAdapter orgListAdapter;
@@ -38,16 +40,15 @@ public class HomeFragment extends Fragment implements OrgAdapter.ItemClickListen
     public HomeFragment() {
 
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
     @SuppressLint("MissingInflatedId")
-    @Override
+    @Override// creates View
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        requireActivity().setTitle("Lucent");
+        activity = requireActivity();
+        activity.setTitle("Lucent");
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container,false);
         view = binding.getRoot();
 
@@ -60,12 +61,11 @@ public class HomeFragment extends Fragment implements OrgAdapter.ItemClickListen
 
         return view;
     }
-
-    @Override
+    @Override//handles operations after view creation
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        viewModel = new ViewModelProvider(this).get(TopOrgViewModel.class);
+        viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         viewModel.refresh();
 
         recyclerView = binding.topOrgCards;
@@ -83,7 +83,7 @@ public class HomeFragment extends Fragment implements OrgAdapter.ItemClickListen
         });
         observeViewModel();
     }
-
+    //Observes changes in Live Data
     private void observeViewModel(){
         viewModel.orgListLiveData.observe(getViewLifecycleOwner(), organizations -> {
             if(organizations != null){
@@ -111,12 +111,11 @@ public class HomeFragment extends Fragment implements OrgAdapter.ItemClickListen
             }
         });
     }
-
-    @Override
+    @Override//Navigates to Organization details
     public void onItemClick(Organization organization) {//To go org-page from cards
         try {
             Fragment fragment = OrgPageFragment.newInstance(organization);
-            FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+            FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.id_fragment_controller,fragment,"fragment_org_page");
             transaction.addToBackStack(null);
             transaction.commit();

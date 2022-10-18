@@ -36,4 +36,6 @@ public interface OrgAPI {
     @GET("org/my")
     Single<List<Organization>>getMyOrgs(@Header("AUTHORIZATION") String bearerToken);
 
+    @GET("token/refresh")
+    Single<LoginResponse>getAccessToken(@Header("AUTHORIZATION") String refreshToken);
 }

@@ -1,8 +1,18 @@
 package com.example.lucent.model;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import androidx.fragment.app.FragmentActivity;
+
 import java.util.List;
 
 import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -47,5 +57,8 @@ public class API {
     //Gets myOrganizations
     public Single<List<Organization>> getMyOrgs(@Header("AUTHORIZATION") String bearerToken) {
         return orgAPI.getMyOrgs(bearerToken);
+    }
+    public Single<LoginResponse> getAccessToken(@Header("AUTHORIZATION") String refreshToken) {
+        return orgAPI.getAccessToken(refreshToken);
     }
 }

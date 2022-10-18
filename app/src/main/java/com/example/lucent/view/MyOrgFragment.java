@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -29,6 +30,7 @@ import com.example.lucent.viewmodel.MyOrgViewModel;
 import java.util.ArrayList;
 
 public class MyOrgFragment extends Fragment implements OrgAdapter.ItemClickListener{
+    private FragmentActivity activity;
     private View view;
     private MyOrgViewModel viewModel;
     private FragmentMyOrgBinding binding;
@@ -43,7 +45,8 @@ public class MyOrgFragment extends Fragment implements OrgAdapter.ItemClickListe
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        requireActivity().setTitle("My Organizations");
+        activity = requireActivity();
+        activity.setTitle("My Organizations");
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_org, container,false);
         view = binding.getRoot();
         err = binding.idErrorMessage;
@@ -58,8 +61,8 @@ public class MyOrgFragment extends Fragment implements OrgAdapter.ItemClickListe
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        String refresh_token = requireActivity().getSharedPreferences("Token", Context.MODE_PRIVATE).getString("refresh_token",null);
-        String access_token = requireActivity().getSharedPreferences("Token", Context.MODE_PRIVATE).getString("refresh_token",null);
+        String refresh_token = activity.getSharedPreferences("Token", Context.MODE_PRIVATE).getString("refresh_token",null);
+        String access_token = activity.getSharedPreferences("Token", Context.MODE_PRIVATE).getString("refresh_token",null);
         if(refresh_token==null || access_token==null){
             err.setText("Please Login to see your subscribed Organizations.");
             err.setVisibility(View.VISIBLE);
@@ -70,7 +73,7 @@ public class MyOrgFragment extends Fragment implements OrgAdapter.ItemClickListe
             recyclerView = binding.topOrgCards;
             progressBar.setVisibility(View.VISIBLE);
             viewModel = new ViewModelProvider(this).get(MyOrgViewModel.class);
-            viewModel.refresh(requireActivity());
+            viewModel.refresh(activity);
             recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
             recyclerView.setAdapter(orgAdapter);
             observeViewModel();
@@ -79,7 +82,7 @@ public class MyOrgFragment extends Fragment implements OrgAdapter.ItemClickListe
             recyclerView.setVisibility(View.GONE);
             err.setVisibility(View.GONE);
             progressBar.setVisibility(View.VISIBLE);
-            viewModel.refresh(requireActivity());
+            viewModel.refresh(activity);
             swipeRefreshLayout.setRefreshing(false);
         });
     }
@@ -117,7 +120,7 @@ public class MyOrgFragment extends Fragment implements OrgAdapter.ItemClickListe
     public void onItemClick(Organization organization) {
         try {
             Fragment fragment = OrgPageFragment.newInstance(organization);
-            FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+            FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.id_fragment_controller,fragment,"fragment_org_page");
             transaction.addToBackStack(null);
             transaction.commit();

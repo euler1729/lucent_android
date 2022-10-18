@@ -7,7 +7,9 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
@@ -21,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lucent.R;
+import com.example.lucent.databinding.FragmentRegisterBinding;
 import com.example.lucent.model.API;
 import com.example.lucent.model.RegisterRequest;
 import com.example.lucent.model.User;
@@ -37,7 +40,10 @@ public class RegisterFragment extends Fragment {
     TextView registerName, registerPhone, registerPassword;
     Button registerBtn, loginBtn;
 
-
+    private FragmentActivity activity;
+    private FragmentRegisterBinding binding;
+    private View view;
+    Navigator navigator = new Navigator();
     private final API api = new API();
     private final CompositeDisposable disposable = new CompositeDisposable();
     private MutableLiveData<User> user = new MutableLiveData<>(new User());
@@ -49,22 +55,18 @@ public class RegisterFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static RegisterFragment newInstance(String param1, String param2) {
-        RegisterFragment fragment = new RegisterFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        requireActivity().setTitle("Register");
-        return inflater.inflate(R.layout.fragment_register, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        activity = requireActivity();
+        activity.setTitle("Register");
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_register, container, false);
+        view = binding.getRoot();
+        return view;
     }
 
 
@@ -81,7 +83,7 @@ public class RegisterFragment extends Fragment {
 
         // On login button click navigate to login page
         loginBtn.setOnClickListener(View->{
-            navLogin();
+            navigator.navLogin(activity);
         });
 
         // On register button click register user
@@ -124,7 +126,7 @@ public class RegisterFragment extends Fragment {
 
     public void navLogin(){
         Fragment fragment = new LoginFragment();
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentManager fragmentManager = activity.getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.id_fragment_controller, fragment);
         fragmentTransaction.addToBackStack(HomeFragment.class.getName());

@@ -14,14 +14,14 @@ import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 
 
-public class TopOrgViewModel extends AndroidViewModel {
+public class HomeViewModel extends AndroidViewModel {
     public MutableLiveData<List<Organization>> orgListLiveData = new MutableLiveData<>();
     public MutableLiveData<Boolean> orgLoadErr = new MutableLiveData<>(false);
     public MutableLiveData<Boolean> loading = new MutableLiveData<>(true);
 
     private final API api = new API();
     private final CompositeDisposable disposable = new CompositeDisposable();
-    public TopOrgViewModel(@NonNull Application application) {
+    public HomeViewModel(@NonNull Application application) {
         super(application);
     }
 

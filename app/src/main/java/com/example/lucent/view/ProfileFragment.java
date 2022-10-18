@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +31,7 @@ import com.example.lucent.model.API;
 import com.example.lucent.model.LoginResponse;
 import com.example.lucent.model.User;
 import com.example.lucent.viewmodel.LoginViewModel;
+import com.example.lucent.viewmodel.ProfileViewModel;
 
 import java.util.Objects;
 
@@ -46,6 +48,7 @@ public class ProfileFragment extends Fragment {
     private FragmentDonorProfileBinding binding;
     private View view;
     private final API api = new API();
+    private ProfileViewModel viewModel;
     private final CompositeDisposable disposable = new CompositeDisposable();
     private final MutableLiveData<User> user = new MutableLiveData<>(new User());
     private final MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
@@ -74,77 +77,116 @@ public class ProfileFragment extends Fragment {
     @SuppressLint("LongLogTag")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        String refresh_token = requireActivity().getSharedPreferences("Token", Context.MODE_PRIVATE).getString("refresh_token",null);
         activity = requireActivity();
+        String refresh_token = activity.getSharedPreferences("Token", Context.MODE_PRIVATE).getString("refresh_token",null);
         if(refresh_token==null){
             navigator.navLogin(activity);
         }
+        activity.setTitle("Profile");
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_donor_profile, container, false);
         view = binding.getRoot();
         name = binding.profileName;
         phone = binding.profilePhone;
         logOutBtn = binding.logoutBtn;
-        activity.setTitle("Profile");
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getProfile();
+        viewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        viewModel.refresh(activity);
         logOutBtn.setOnClickListener(View->{
             logOut();
         });
+        observeViewModel();
+    }
+    private void observeViewModel(){
+        viewModel.loading.observe(getViewLifecycleOwner(),isLoading->{
+            if(isLoading!=null && !isLoading){
+                viewModel.userLiveData.observe(getViewLifecycleOwner(),user->{
+                    name.setText(user.getName());
+                    phone.setText(user.getPhone());
+                });
+            }
+        });
+        viewModel.err.observe(getViewLifecycleOwner(),error->{
+            if(error){
+                logOut();
+            }
+        });
     }
 
-    public void getProfile() {
-        loading.setValue(true);
-        SharedPreferences token = activity.getSharedPreferences("Token", Context.MODE_PRIVATE);
-        String accessToken = token.getString("access_token", "Token Here");
-
-
-        disposable.add(
-                api.getProfile("Bearer " + accessToken)
-                        .subscribeOn(Schedulers.newThread())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeWith(new DisposableSingleObserver<User>() {
-                            @Override
-                            public void onSuccess(User value) {
-                                user.setValue(value);
-                                loading.setValue(false);
-                                loadingFailed.setValue(false);
-
-                                // Updating Login Title
-//                                updateMenuTitles("Profile");
-
-                                // Updating Shared Preferences
-                                SharedPreferences sharedPreferences = activity.getSharedPreferences("Token", Context.MODE_PRIVATE);
-                                SharedPreferences.Editor storeToken = sharedPreferences.edit();
-                                storeToken.putString("name", value.getName());
-                                storeToken.putString("phone", value.getPhone());
-                                storeToken.apply();
-
-                                // Update menu items
-                                MenuItem bedMenuItem = MainActivity.menu.findItem(R.id.id_action_login);
-                                bedMenuItem.setTitle(Objects.requireNonNull(user.getValue()).getName());
-
-                                // Updating Page
-                                name.setText(user.getValue().getName());
-                                phone.setText(user.getValue().getPhone());
-//                                navHome();
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-                                loadingFailed.setValue(true);
-                                loading.setValue(false);
-//                                Toast.makeText(getActivity(), "Information Fetch Failed", Toast.LENGTH_SHORT).show();
-                                e.printStackTrace();
-                                navigator.navLogin(activity);
-                            }
-                        })
-        );
-    }
+//    public void getProfile() {
+//        loading.setValue(true);
+//        SharedPreferences token = activity.getSharedPreferences("Token", Context.MODE_PRIVATE);
+//        String accessToken = token.getString("access_token", "Token Here");
+//
+//
+//        disposable.add(
+//                api.getProfile("Bearer " + accessToken)
+//                        .subscribeOn(Schedulers.newThread())
+//                        .observeOn(AndroidSchedulers.mainThread())
+//                        .subscribeWith(new DisposableSingleObserver<User>() {
+//                            @Override
+//                            public void onSuccess(User value) {
+//                                user.setValue(value);
+//                                loading.setValue(false);
+//                                loadingFailed.setValue(false);
+//
+//                                // Updating Shared Preferences
+//                                SharedPreferences sharedPreferences = activity.getSharedPreferences("Token", Context.MODE_PRIVATE);
+//                                SharedPreferences.Editor storeToken = sharedPreferences.edit();
+//                                storeToken.putString("name", value.getName());
+//                                storeToken.putString("phone", value.getPhone());
+//                                storeToken.apply();
+//
+//                                // Update menu items
+//                                MenuItem bedMenuItem = MainActivity.menu.findItem(R.id.id_action_login);
+//                                bedMenuItem.setTitle(Objects.requireNonNull(user.getValue()).getName());
+//
+//                                // Updating Page
+//                                name.setText(user.getValue().getName());
+//                                phone.setText(user.getValue().getPhone());
+//                            }
+//
+//                            @Override
+//                            public void onError(Throwable e) {
+//                                refreshAccessToken(activity);
+////                                loadingFailed.setValue(true);
+////                                loading.setValue(false);
+//////                                Toast.makeText(getActivity(), "Information Fetch Failed", Toast.LENGTH_SHORT).show();
+////                                e.printStackTrace();
+////                                navigator.navLogin(activity);
+//                            }
+//                        })
+//        );
+//    }
+//    private void refreshAccessToken(FragmentActivity activity){
+//        String refresh_token = activity.getSharedPreferences("Token", Context.MODE_PRIVATE).getString("refresh_token", "Token Here");
+//        disposable.add(
+//                api.getAccessToken("Bearer "+refresh_token)
+//                        .subscribeOn(Schedulers.newThread())
+//                        .observeOn(AndroidSchedulers.mainThread())
+//                        .subscribeWith(new DisposableSingleObserver<LoginResponse>() {
+//                            @Override
+//                            public void onSuccess(LoginResponse response) {
+//                                @SuppressLint("CommitPrefEdits") SharedPreferences.Editor storeToken = activity.getSharedPreferences("Token", Context.MODE_PRIVATE).edit();
+//                                storeToken.putString("access_token",response.getAccess_token());
+//                                Log.i("access_token","accessToken: "+response.getAccess_token());
+//                                getProfile();
+//                            }
+//
+//                            @Override
+//                            public void onError(Throwable e) {
+////                                orgLoadErr.setValue(true);
+//                                logOut();
+//                                loading.setValue(false);
+//                                e.printStackTrace();
+//                            }
+//                        })
+//        );
+//    }
 
     public void logOut(){
         // Updating Shared Preferences
@@ -158,7 +200,7 @@ public class ProfileFragment extends Fragment {
         MenuItem bedMenuItem = MainActivity.menu.findItem(R.id.id_action_login);
         bedMenuItem.setTitle("Login");
 
-        navigator.navHome(activity);
+        navigator.navLogin(activity);
     }
 
 }

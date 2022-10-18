@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,7 +22,6 @@ import android.widget.TextView;
 import com.example.lucent.R;
 import com.example.lucent.adapter.SpendingTableAdapter;
 import com.example.lucent.databinding.FragmentOrgPageBinding;
-import com.example.lucent.databinding.FragmentOrgPageBindingImpl;
 import com.example.lucent.model.Organization;
 import com.example.lucent.model.Spending;
 import com.example.lucent.viewmodel.OrgPageViewModel;
@@ -32,7 +32,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 public class OrgPageFragment extends Fragment {
-
+    private FragmentActivity activity;
     private FragmentOrgPageBinding binding;
     private View view;
     private OrgPageViewModel viewModel;
@@ -62,7 +62,8 @@ public class OrgPageFragment extends Fragment {
     @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        requireActivity().setTitle(organization.getName());
+        activity = requireActivity();
+        activity.setTitle(organization.getName());
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_org_page, container, false);
         view = binding.getRoot();
         binding.idOrgpageOrgName.setText(organization.getName());
