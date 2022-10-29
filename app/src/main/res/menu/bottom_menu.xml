@@ -8,7 +8,7 @@
         android:title="Home" />
     <item
         android:id= "@+id/myOrgFragment"
-        android:title="My Org"
+        android:title="Subscriptions"
         android:icon="@drawable/icon_list"/>
     <item
         android:id="@+id/ProfileFragment"

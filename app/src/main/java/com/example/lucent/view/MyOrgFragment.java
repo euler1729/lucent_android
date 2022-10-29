@@ -93,7 +93,11 @@ public class MyOrgFragment extends Fragment implements OrgAdapter.ItemClickListe
                 err.setVisibility(View.GONE);
                 progressBar.setVisibility(View.GONE);
                 orgAdapter.updateOrgList(organizations);
-                recyclerView.setVisibility(View.VISIBLE);
+                if(organizations.size()!=0) recyclerView.setVisibility(View.VISIBLE);
+                else{
+                    err.setText("You've not Subscribed to any Organization.");
+                    err.setVisibility(View.VISIBLE);
+                }
             }
         });
         viewModel.orgLoadErr.observe(getViewLifecycleOwner(),loadErr->{

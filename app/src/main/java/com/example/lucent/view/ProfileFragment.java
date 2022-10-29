@@ -10,49 +10,29 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.lucent.R;
 import com.example.lucent.databinding.FragmentDonorProfileBinding;
-import com.example.lucent.databinding.FragmentTopOrgBinding;
-import com.example.lucent.model.API;
-import com.example.lucent.model.LoginResponse;
-import com.example.lucent.model.User;
-import com.example.lucent.viewmodel.LoginViewModel;
 import com.example.lucent.viewmodel.ProfileViewModel;
-
-import java.util.Objects;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.observers.DisposableSingleObserver;
-import io.reactivex.schedulers.Schedulers;
 
 public class ProfileFragment extends Fragment {
 
-
-    private Navigator navigator = new Navigator();
+    private final Navigator navigator = new Navigator();
     private FragmentActivity activity;
     private FragmentDonorProfileBinding binding;
     private View view;
-    private final API api = new API();
     private ProfileViewModel viewModel;
-    private final CompositeDisposable disposable = new CompositeDisposable();
-    private final MutableLiveData<User> user = new MutableLiveData<>(new User());
-    private final MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
-    private final MutableLiveData<Boolean> loadingFailed = new MutableLiveData<>(false);
+    private SwipeRefreshLayout swipeRefreshLayout;
+
     private TextView name;
     private TextView phone;
     private Button logOutBtn;
@@ -60,13 +40,6 @@ public class ProfileFragment extends Fragment {
 
     public ProfileFragment() {
         // Required empty public constructor
-    }
-
-    public static ProfileFragment newInstance(String param1, String param2) {
-        ProfileFragment fragment = new ProfileFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
@@ -85,6 +58,7 @@ public class ProfileFragment extends Fragment {
         activity.setTitle("Profile");
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_donor_profile, container, false);
         view = binding.getRoot();
+        swipeRefreshLayout = binding.idDonorProfile;
         name = binding.profileName;
         phone = binding.profilePhone;
         logOutBtn = binding.logoutBtn;
@@ -96,8 +70,10 @@ public class ProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
         viewModel.refresh(activity);
-        logOutBtn.setOnClickListener(View->{
-            logOut();
+        logOutBtn.setOnClickListener(View-> logOut());
+        swipeRefreshLayout.setOnRefreshListener(()->{
+            viewModel.refresh(activity);
+            swipeRefreshLayout.setRefreshing(false);
         });
         observeViewModel();
     }

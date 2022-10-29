@@ -10,12 +10,8 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,15 +21,7 @@ import android.widget.Toast;
 
 import com.example.lucent.R;
 import com.example.lucent.databinding.FragmentLoginBinding;
-import com.example.lucent.databinding.FragmentTopOrgBinding;
-import com.example.lucent.model.API;
-import com.example.lucent.model.LoginResponse;
 import com.example.lucent.viewmodel.LoginViewModel;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.observers.DisposableSingleObserver;
-import io.reactivex.schedulers.Schedulers;
 
 public class LoginFragment extends Fragment {
     private final Navigator navigator=new Navigator();
@@ -69,7 +57,7 @@ public class LoginFragment extends Fragment {
         loginPassword =binding.loginPassword;
         loginBtn = binding.loginBtn;
         registerBtn = binding.loginRegisterBtn;
-        activity.setTitle("Login");
+        activity.setTitle("Sign In");
         return view;
     }
 
@@ -89,14 +77,10 @@ public class LoginFragment extends Fragment {
                 Toast.makeText(activity, "Phone Number or Password can't be empty!", Toast.LENGTH_SHORT).show();
             }
         });
-        registerBtn.setOnClickListener(View->{
-            navigator.navDonorRegister(activity);
-        });
+        registerBtn.setOnClickListener(View-> navigator.navDonorRegister(activity));
         observeViewModel();
     }
     private void observeViewModel(){
-        loginViewModel.loggingIn.observe(getViewLifecycleOwner(),log->{
-            loginBtn.setText(log?"Logging in":"Login");
-        });
+        loginViewModel.loggingIn.observe(getViewLifecycleOwner(),log-> loginBtn.setText(log?"Logging in":"Login"));
     }
 }

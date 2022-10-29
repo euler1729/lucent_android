@@ -9,7 +9,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.HomeFragment">
-
+<!--<ScrollView-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent">-->
     <RelativeLayout
         android:id="@+id/id_top_org_relative"
         android:layout_width="match_parent"
@@ -75,9 +77,8 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </RelativeLayout>
-
+<!--</ScrollView>-->
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>

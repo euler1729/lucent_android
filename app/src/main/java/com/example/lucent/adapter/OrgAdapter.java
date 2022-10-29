@@ -74,6 +74,6 @@ public class OrgAdapter extends RecyclerView.Adapter<OrgAdapter.ViewHolder> {
         }
     }
     public interface ItemClickListener{
-        public void onItemClick(Organization organization);
+        void onItemClick(Organization organization);
     }
 }

@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
-
         getSupportFragmentManager().beginTransaction().replace(R.id.id_fragment_controller,new HomeFragment()).commit();
         try{
             bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -67,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     public void updateMenuTitles() {
         MenuItem bedMenuItem = menu.findItem(R.id.id_action_login);
         SharedPreferences token = this.getSharedPreferences("Token", Context.MODE_PRIVATE);
@@ -74,13 +74,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         if(refreshToken == null){
-            bedMenuItem.setTitle("Login");
+            bedMenuItem.setTitle("Sign In");
         }
         else{
             bedMenuItem.setTitle(token.getString("name", ""));
         }
     }
-
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

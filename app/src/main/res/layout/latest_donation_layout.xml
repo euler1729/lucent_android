@@ -13,24 +13,17 @@
         tools:ignore="MissingConstraints,UselessParent"
         android:layout_marginBottom="5dp">
         <TextView
-            android:id="@+id/id_table_descriptionTab"
+            android:id="@+id/id_name"
             android:layout_width="116dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Description" />
         <TextView
-            android:id="@+id/id_table_amountTab"
+            android:id="@+id/id_latest_donation_amount"
             android:layout_width="134dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Amount" />
-        <TextView
-            android:id="@+id/id_table_timeTab"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Time"/>
-
     </LinearLayout>
     <View
         android:id="@+id/divider2"

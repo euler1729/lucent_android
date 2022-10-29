@@ -27,7 +27,6 @@ import java.util.ArrayList;
 
 public class HomeFragment extends Fragment implements OrgAdapter.ItemClickListener{
     private FragmentActivity activity;
-    private View view;
     private HomeViewModel viewModel;
     private RecyclerView recyclerView;
     private FragmentHomeBinding binding;
@@ -50,7 +49,7 @@ public class HomeFragment extends Fragment implements OrgAdapter.ItemClickListen
         activity = requireActivity();
         activity.setTitle("Lucent");
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container,false);
-        view = binding.getRoot();
+        View view = binding.getRoot();
 
         imgView = binding.coverImg;
         imgView.setImageResource(R.drawable.cover_img);

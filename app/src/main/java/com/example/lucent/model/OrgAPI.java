@@ -18,7 +18,8 @@ public interface OrgAPI {
     Single<List<Organization>> getOrgs();
     @GET
     Single<List<Spending>> getSpendings(@Url String url);
-
+    @GET
+    Single<List<User>> getLatestDonations(@Url String url);
 //    Login
     @POST("user/login")
     Single<LoginResponse> login(@Query("phone") String phone, @Query("password") String password);
@@ -35,7 +36,9 @@ public interface OrgAPI {
     //Gets subscribed organizations
     @GET("org/my")
     Single<List<Organization>>getMyOrgs(@Header("AUTHORIZATION") String bearerToken);
-
+    //refreshes access token
     @GET("token/refresh")
     Single<LoginResponse>getAccessToken(@Header("AUTHORIZATION") String refreshToken);
+
+
 }

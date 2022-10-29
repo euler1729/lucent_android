@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
@@ -15,7 +14,6 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.lucent.model.API;
 import com.example.lucent.model.LoginResponse;
 import com.example.lucent.model.Organization;
-import com.example.lucent.model.User;
 
 import java.util.List;
 

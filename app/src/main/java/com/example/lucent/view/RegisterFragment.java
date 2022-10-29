@@ -1,8 +1,6 @@
 package com.example.lucent.view;
 
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,7 +13,6 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
 
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -32,7 +29,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.http.Body;
 
 
 public class RegisterFragment extends Fragment {
@@ -46,7 +42,7 @@ public class RegisterFragment extends Fragment {
     Navigator navigator = new Navigator();
     private final API api = new API();
     private final CompositeDisposable disposable = new CompositeDisposable();
-    private MutableLiveData<User> user = new MutableLiveData<>(new User());
+    private final MutableLiveData<User> user = new MutableLiveData<>(new User());
     private MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
     private MutableLiveData<Boolean> loadingFailed = new MutableLiveData<>(false);
 
@@ -82,14 +78,10 @@ public class RegisterFragment extends Fragment {
         loginBtn = view.findViewById(R.id.registration_login_btn);
 
         // On login button click navigate to login page
-        loginBtn.setOnClickListener(View->{
-            navigator.navLogin(activity);
-        });
+        loginBtn.setOnClickListener(View-> navigator.navLogin(activity));
 
         // On register button click register user
-        registerBtn.setOnClickListener(View->{
-            register();
-        });
+        registerBtn.setOnClickListener(View-> register());
     }
 
     public void register(){
