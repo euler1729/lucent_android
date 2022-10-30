@@ -55,4 +55,7 @@ public class API {
     public Single<LoginResponse> getAccessToken(@Header("AUTHORIZATION") String refreshToken) {
         return orgAPI.getAccessToken(refreshToken);
     }
+    public Single<Membership> checkMembersip(@Header("AUTHORIZATION") String bearerToken, @Url String url){
+        return orgAPI.checkMembership(bearerToken,url);
+    }
 }

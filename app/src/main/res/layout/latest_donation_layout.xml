@@ -8,27 +8,32 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        tools:ignore="MissingConstraints,UselessParent"
-        android:layout_marginBottom="5dp">
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
         <TextView
-            android:id="@+id/id_name"
+            android:id="@+id/id_latest_donation_name"
             android:layout_width="116dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Description" />
+            android:text="Name" />
         <TextView
             android:id="@+id/id_latest_donation_amount"
             android:layout_width="134dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Amount" />
+        <TextView
+            android:id="@+id/id_latest_donation_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Time"/>
+
     </LinearLayout>
     <View
         android:id="@+id/divider2"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:backgroundTint="@color/black"
-        android:background="?android:attr/listDivider" />
+        android:background="?android:attr/listDivider"/>
 </TableLayout>

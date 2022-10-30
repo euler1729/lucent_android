@@ -40,5 +40,8 @@ public interface OrgAPI {
     @GET("token/refresh")
     Single<LoginResponse>getAccessToken(@Header("AUTHORIZATION") String refreshToken);
 
+    @GET
+    Single<Membership> checkMembership(@Header("AUTHORIZATION")String bearerToken,@Url String url);
+
 
 }

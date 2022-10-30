@@ -12,8 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.lucent.R;
 import com.example.lucent.model.Spending;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class SpendingTableAdapter extends RecyclerView.Adapter<SpendingTableAdapter.SpendingViewHolder> {
 
@@ -40,7 +43,23 @@ public class SpendingTableAdapter extends RecyclerView.Adapter<SpendingTableAdap
         Spending spending = list.get(position);
         holder.description.setText(spending.getDescription());
         holder.amount.setText(String.valueOf(spending.getAmount()));
-        holder.time.setText(spending.getCreated());
+        try{
+            String inputPattern = "yyyy-MM-dd HH:mm:ss";
+            String outputPattern = "dd-MMM-yyyy h:mm a";
+            SimpleDateFormat inputFormat = new SimpleDateFormat(inputPattern);
+            SimpleDateFormat outputFormat = new SimpleDateFormat(outputPattern);
+            StringBuilder date = new StringBuilder(spending.getCreated());
+            for(int i=0; i<date.length(); ++i){
+                if(date.charAt(i)=='T'){
+                    date.setCharAt(i,' ');
+                    break;
+                }
+            }
+            holder.time.setText(outputFormat.format(Objects.requireNonNull((inputFormat).parse(date.toString()))));
+        }catch (ParseException e){
+            holder.time.setText(spending.getCreated());
+            e.printStackTrace();
+        }
     }
 
     @Override

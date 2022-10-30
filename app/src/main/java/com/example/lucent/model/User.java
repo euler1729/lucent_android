@@ -1,5 +1,7 @@
 package com.example.lucent.model;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 public class User {
@@ -13,7 +15,12 @@ public class User {
     Boolean verified;
     @SerializedName("amount")
     int amount;
+    @SerializedName("donor")
+    Donor donor;
+    @SerializedName("created")
+    String created;
 
+    @NonNull
     @Override
     public String toString() {
         return "User{" +
@@ -61,5 +68,21 @@ public class User {
 
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    public Donor getDonor() {
+        return donor;
+    }
+
+    public void setDonor(Donor donor) {
+        this.donor = donor;
+    }
+
+    public String getCreated() {
+        return created;
+    }
+
+    public void setCreated(String created) {
+        this.created = created;
     }
 }
