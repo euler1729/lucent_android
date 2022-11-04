@@ -43,5 +43,11 @@ public interface OrgAPI {
     @GET
     Single<Membership> checkMembership(@Header("AUTHORIZATION")String bearerToken,@Url String url);
 
+    @HTTP(method = "POST",path="donate",hasBody = true)
+    Single<Payment>donate(@Header("AUTHORIZATION")String bearerToken,  @Body PayRequest request);
+
+    @HTTP(method = "POST", path = "membership/request", hasBody = true)
+    Single<Membership>requestMembership(@Header("AUTHORIZATION")String bearerToken,  @Body MembershipRequest membershipRequest);
+
 
 }

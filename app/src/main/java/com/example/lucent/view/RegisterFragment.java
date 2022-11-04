@@ -115,7 +115,6 @@ public class RegisterFragment extends Fragment {
                         })
         );
     }
-
     public void navLogin(){
         Fragment fragment = new LoginFragment();
         FragmentManager fragmentManager = activity.getSupportFragmentManager();

@@ -1,5 +1,7 @@
 package com.example.lucent.model;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 public class RegisterRequest {
@@ -16,6 +18,7 @@ public class RegisterRequest {
         this.phone = phone;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "User{" +

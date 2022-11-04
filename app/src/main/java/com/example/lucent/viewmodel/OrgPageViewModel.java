@@ -8,8 +8,11 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
+import android.view.View;
+import android.widget.MultiAutoCompleteTextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MediatorLiveData;
@@ -19,7 +22,10 @@ import com.example.lucent.R;
 import com.example.lucent.model.API;
 import com.example.lucent.model.LoginResponse;
 import com.example.lucent.model.Membership;
+import com.example.lucent.model.MembershipRequest;
 import com.example.lucent.model.Organization;
+import com.example.lucent.model.PayRequest;
+import com.example.lucent.model.Payment;
 import com.example.lucent.model.Spending;
 import com.example.lucent.model.User;
 
@@ -34,7 +40,8 @@ public class OrgPageViewModel extends AndroidViewModel {
     public MutableLiveData<List<Spending>> spendingLiveData = new MutableLiveData<>();
     public MutableLiveData<List<User>> latestDonationLiveData = new MediatorLiveData<>();
     public MutableLiveData<Integer> check = new MediatorLiveData<>(-1);
-
+    public MutableLiveData<Integer> paychek = new MediatorLiveData<>(0);
+    public MutableLiveData<Integer> membershipReqCheck = new MediatorLiveData<>(0);
     private final API api = new API();
     private final CompositeDisposable disposable = new CompositeDisposable();
     SharedPreferences Token;
@@ -95,7 +102,7 @@ public class OrgPageViewModel extends AndroidViewModel {
         access_token = Token.getString("access_token", null);
         refresh_token = Token.getString("refresh_token",null);
         if(refresh_token==null){
-            check.setValue(0);
+            check.setValue(0);//not logged in
             return;
         }
         disposable.add(
@@ -106,8 +113,8 @@ public class OrgPageViewModel extends AndroidViewModel {
                             @Override
                             public void onSuccess(Membership membership) {
                                 loggedin = true;
-                                if(membership.isApproved()) check.setValue(2);
-                                else check.setValue(1);
+                                if(membership.isApproved()) check.setValue(2);//2 means already member
+                                else check.setValue(1);//value 1 means membership pending
                                 Log.e("Checkmembership", membership.isApproved()?"YEs":"No");
                             }
 
@@ -115,7 +122,7 @@ public class OrgPageViewModel extends AndroidViewModel {
                             public void onError(Throwable e) {
                                 Log.e("Checkmembership", "error");
                                 if(loggedin){
-                                    check.setValue(3);
+                                    check.setValue(3);//3 means not a member
                                     return;
                                 }
                                 refreshAccessToken(activity,orgId);
@@ -143,11 +150,58 @@ public class OrgPageViewModel extends AndroidViewModel {
 
                             @Override
                             public void onError(Throwable e) {
-                                check.setValue(0);
+                                check.setValue(0);//0 means not logged in
                                 loggedin = false;
                                 e.printStackTrace();
                             }
                         })
+        );
+    }
+    public void requestPayment(FragmentActivity activity, PayRequest payRequest){
+        Token = activity.getSharedPreferences("Token", Context.MODE_PRIVATE);
+        access_token = Token.getString("access_token", null);
+        Log.i("Payment","request payment");
+        disposable.add(
+                api.donate("Bearer "+access_token,payRequest)
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeWith(new DisposableSingleObserver<Payment>(){
+
+                            @Override
+                            public void onSuccess(Payment payment) {
+                                Log.i("Payment",String.valueOf(payment.getAmount()));
+                                paychek.setValue(1);
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                paychek.setValue(2);
+                                Log.i("Payment","Failed!");
+                            }
+                        })
+
+        );
+    }
+    public void requestMembership(FragmentActivity activity, MembershipRequest membershipRequest){
+        Token = activity.getSharedPreferences("Token", Context.MODE_PRIVATE);
+        access_token = Token.getString("access_token", null);
+        disposable.add(
+                api.requestMembership("Bearer "+access_token,membershipRequest)
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeWith(new DisposableSingleObserver<Membership>(){
+
+                            @Override
+                            public void onSuccess(Membership membership) {
+                                membershipReqCheck.setValue(1);
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                membershipReqCheck.setValue(2);
+                            }
+                        }
+                )
         );
     }
     @Override

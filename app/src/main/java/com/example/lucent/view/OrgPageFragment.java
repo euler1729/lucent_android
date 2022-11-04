@@ -3,7 +3,6 @@ package com.example.lucent.view;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -11,28 +10,29 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.lucent.R;
-import com.example.lucent.adapter.LatestDonationTableAdapter;
 import com.example.lucent.adapter.PagerAdapter;
-import com.example.lucent.adapter.SpendingTableAdapter;
 import com.example.lucent.databinding.FragmentOrgPageBinding;
+import com.example.lucent.model.API;
+import com.example.lucent.model.MembershipRequest;
 import com.example.lucent.model.Organization;
+import com.example.lucent.model.PayRequest;
 import com.example.lucent.util.PopupDialog;
 import com.example.lucent.viewmodel.OrgPageViewModel;
 import com.google.android.material.tabs.TabLayout;
@@ -47,9 +47,10 @@ import com.sslcommerz.library.payment.model.util.SdkType;
 import com.sslcommerz.library.payment.viewmodel.listener.OnPaymentResultListener;
 import com.sslcommerz.library.payment.viewmodel.management.PayUsingSSLCommerz;
 
-import java.util.ArrayList;
+import io.reactivex.disposables.CompositeDisposable;
 
 public class OrgPageFragment extends Fragment{
+    private Navigator navigator = new Navigator();
     private  OrgPageViewModel viewModel;
     private FragmentOrgPageBinding binding;
     private final String TAG = "SSLC";
@@ -59,6 +60,20 @@ public class OrgPageFragment extends Fragment{
     private TabLayout tabLayout;
     private ViewPager2 viewPager;
     private Dialog dialog;
+
+    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog pay_window;
+    private Button paynow;
+    private EditText amount;
+    private AlertDialog failed_window;
+    private AlertDialog success_window;
+    private AlertDialog logDialog;
+    private Button logPopBtn;
+
+    private AlertDialog membership_req_window;
+    private Button send_req_btn;
+    private EditText nid;
+    private EditText membershipCode;
 
     public OrgPageFragment() {
     }
@@ -124,8 +139,16 @@ public class OrgPageFragment extends Fragment{
         viewModel.check.observe(getViewLifecycleOwner(),ck->{
             if(ck!=-1){
                 if(ck==0){
-                    PopupDialog logDialog = new PopupDialog(requireContext(),requireActivity());
+                    dialogBuilder = new AlertDialog.Builder(requireContext());
+                    final View log_window_view = getLayoutInflater().inflate(R.layout.login_popup,null);
+                    dialogBuilder.setView(log_window_view);
+                    logDialog = dialogBuilder.create();
+                    logPopBtn = (Button) log_window_view.findViewById(R.id.id_login_popup_btn);
                     logDialog.show();
+                    logPopBtn.setOnClickListener(v->{
+                        logDialog.dismiss();
+                        navigator.navLogin(requireActivity());
+                    });
                 }
                 else if(ck==1){//Pending Request
                     dialog = new Dialog(requireContext());
@@ -134,23 +157,86 @@ public class OrgPageFragment extends Fragment{
                     dialog.show();
                 }
                 else if(ck==2){//Already Member
-                    
+                    createPayDialog();
                 }
                 else if(ck==3){//Send membership request
-
+                    requestMembership();
                 }
             }
         });
+        viewModel.paychek.observe(getViewLifecycleOwner(),ck->{
+            if(ck!=0){
+                if(ck==1){
+                    Log.e("Payment","Done");
+                    dialogBuilder = new AlertDialog.Builder(requireContext());
+                    final View success_window_view = getLayoutInflater().inflate(R.layout.success_payment_popup,null);
+                    dialogBuilder.setView(success_window_view);
+                    success_window = dialogBuilder.create();
+                    success_window.show();
+                }
+                if(ck==2){
+                    Log.e("Payment","Failed");
+                    dialogBuilder = new AlertDialog.Builder(requireContext());
+                    final View success_window_view = getLayoutInflater().inflate(R.layout.payment_failed_popup,null);
+                    dialogBuilder.setView(success_window_view);
+                    failed_window = dialogBuilder.create();
+                    failed_window.show();
+                }
+            }
+        });
+        viewModel.membershipReqCheck.observe(getViewLifecycleOwner(),ck->{
+            if(ck==1){
+                Toast.makeText(requireContext(),"Membership Request Sent Successfully!",Toast.LENGTH_SHORT).show();
+            }
+            else if(ck==2){
+                Toast.makeText(requireContext(),"Failed to Send Request!",Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void requestMembership(){
+        dialogBuilder = new AlertDialog.Builder(requireContext());
+        final View membership_req_view = getLayoutInflater().inflate(R.layout.membership_request_popup,null);
+        nid = (EditText) membership_req_view.findViewById(R.id.id_nid);
+        membershipCode = (EditText) membership_req_view.findViewById(R.id.id_membership_code);
+        send_req_btn = (Button) membership_req_view.findViewById(R.id.id_req_popup_btn);
+        dialogBuilder.setView(membership_req_view);
+        membership_req_window = dialogBuilder.create();
+        membership_req_window.show();
+
+        send_req_btn.setOnClickListener(v->{
+            String nnid = String.valueOf(nid.getText());
+            viewModel.requestMembership(requireActivity(),new MembershipRequest(organization.getId(),nnid,
+                    String.valueOf(membershipCode.getText())));
+            membership_req_window.dismiss();
+            Toast.makeText(requireContext(),"Sending Request...",Toast.LENGTH_SHORT).show();
+        });
+    }
+    private void createPayDialog(){
+        dialogBuilder = new AlertDialog.Builder(requireContext());
+        final View pay_window_view = getLayoutInflater().inflate(R.layout.pay_popup,null);
+        amount = (EditText) pay_window_view.findViewById(R.id.id_donate_amount) ;
+        paynow = (Button) pay_window_view.findViewById(R.id.id_pay_now);
+        dialogBuilder.setView(pay_window_view);
+        pay_window = dialogBuilder.create();
+        pay_window.show();
+        paynow.setOnClickListener(v->{
+            pay(String.valueOf(amount.getText()));
+        });
+
+
     }
 
-    private void pay(){
+    private void pay(String amount){
+        pay_window.dismiss();
         try {
-            MandatoryFieldModel mandatoryFieldModel = new MandatoryFieldModel("lucen635b58ebd7974", "lucen635b58ebd7974@ssl", "100", System.currentTimeMillis() + "", CurrencyType.BDT, SdkType.TESTBOX, SdkCategory.BANK_LIST);
+            MandatoryFieldModel mandatoryFieldModel = new MandatoryFieldModel("lucen635b58ebd7974", "lucen635b58ebd7974@ssl", amount, System.currentTimeMillis() + "", CurrencyType.BDT, SdkType.TESTBOX, SdkCategory.BANK_LIST);
             PayUsingSSLCommerz.getInstance().setData(requireActivity(), mandatoryFieldModel, new OnPaymentResultListener() {
                 @Override
                 public void transactionSuccess(TransactionInfo transactionInfo) {
                     if (transactionInfo.getRiskLevel().equals("0")) {
                         Log.e("Success", transactionInfo.getValId());
+                        Log.e("Pay",transactionInfo.getStoreAmount());
+                        viewModel.requestPayment(requireActivity(),new PayRequest(organization.getId(),Integer.parseInt(amount),"SSLCOMMERZ"));
                     /* After successful transaction send this val id to your server and from
                          your server you can call this api
                          https://sandbox.sslcommerz.com/validator/api/validationserverAPI.php?val_id=yourvalid&store_id=yourstoreid&store_passwd=yourpassword

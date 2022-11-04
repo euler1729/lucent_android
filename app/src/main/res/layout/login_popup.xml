@@ -6,7 +6,7 @@
     android:layout_width="250dp"
     android:layout_height="180dp"
     android:layout_gravity="center"
-    android:background="@drawable/popup_modal_bg">
+    android:background="@drawable/border_radios_background">
 
     <TextView
         android:layout_width="240dp"

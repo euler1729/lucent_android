@@ -1,5 +1,6 @@
 package com.example.lucent.model;
 
+import java.security.Signature;
 import java.util.List;
 
 import io.reactivex.Single;
@@ -57,5 +58,11 @@ public class API {
     }
     public Single<Membership> checkMembersip(@Header("AUTHORIZATION") String bearerToken, @Url String url){
         return orgAPI.checkMembership(bearerToken,url);
+    }
+    public Single<Payment> donate(@Header("AUTHORIZATION")String bearerToken, @Body PayRequest request){
+        return orgAPI.donate(bearerToken, request);
+    }
+    public Single<Membership> requestMembership(@Header("AUTHORIZATION")String bearerToken,  @Body MembershipRequest membershipRequest){
+        return orgAPI.requestMembership(bearerToken, membershipRequest);
     }
 }
