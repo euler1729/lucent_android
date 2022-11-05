@@ -49,5 +49,10 @@ public interface OrgAPI {
     @HTTP(method = "POST", path = "membership/request", hasBody = true)
     Single<Membership>requestMembership(@Header("AUTHORIZATION")String bearerToken,  @Body MembershipRequest membershipRequest);
 
+    @HTTP(method = "POST", path = "user/verify", hasBody = true)
+    Single<OTPResponse>requestVerification(@Header("AUTHORIZATION") String bearerToken, @Query(value = "phone", encoded = true) String phone, @Query(value = "code", encoded = true) String code);
+
+    @HTTP(method = "GET", path = "user/resendcode")
+    Single<OTPresendResponse>resendOTP(@Header("AUTHORIZATION") String bearerToken);
 
 }

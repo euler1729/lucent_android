@@ -10,6 +10,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.view.View;
 import android.widget.MultiAutoCompleteTextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -23,11 +24,14 @@ import com.example.lucent.model.API;
 import com.example.lucent.model.LoginResponse;
 import com.example.lucent.model.Membership;
 import com.example.lucent.model.MembershipRequest;
+import com.example.lucent.model.OTPResponse;
+import com.example.lucent.model.OTPresendResponse;
 import com.example.lucent.model.Organization;
 import com.example.lucent.model.PayRequest;
 import com.example.lucent.model.Payment;
 import com.example.lucent.model.Spending;
 import com.example.lucent.model.User;
+import com.example.lucent.model.OTPRequest;
 
 import java.util.List;
 
@@ -48,6 +52,7 @@ public class OrgPageViewModel extends AndroidViewModel {
     SharedPreferences.Editor tokenEditor;
     String refresh_token;
     String access_token;
+    Boolean verified;
     Dialog dialog;
     boolean loggedin = false;
     public OrgPageViewModel(@NonNull Application application) {
@@ -101,8 +106,14 @@ public class OrgPageViewModel extends AndroidViewModel {
         Token = activity.getSharedPreferences("Token", Context.MODE_PRIVATE);
         access_token = Token.getString("access_token", null);
         refresh_token = Token.getString("refresh_token",null);
+        verified = Token.getBoolean("verified", false);
+        System.out.println("verified here = " + verified);
         if(refresh_token==null){
             check.setValue(0);//not logged in
+            return;
+        }
+        else if(verified == false) {
+            check.setValue(4); // 4 means not verified
             return;
         }
         disposable.add(
@@ -182,6 +193,60 @@ public class OrgPageViewModel extends AndroidViewModel {
 
         );
     }
+    public void verifyAccount(FragmentActivity activity, OTPRequest otpRequest){
+        Token = activity.getSharedPreferences("Token", Context.MODE_PRIVATE);
+        SharedPreferences.Editor storeToken = activity.getSharedPreferences("Token", Context.MODE_PRIVATE).edit();
+        access_token = Token.getString("access_token", null);
+
+        disposable.add(
+                api.verifyOTP("Bearer "+access_token, otpRequest.getPhone(), otpRequest.getCode())
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeWith(new DisposableSingleObserver<OTPResponse>(){
+                                           @Override
+                                           public void onSuccess(OTPResponse otpResponse) {
+                                               Toast.makeText(activity,"Verification Success",Toast.LENGTH_SHORT).show();
+
+                                               Token.edit().putBoolean("verified", true).apply();
+                                               System.out.println("Token verified = " + Token.getBoolean("verified", false));
+
+                                               check.setValue(-1);
+                                           }
+
+                                           @Override
+                                           public void onError(Throwable e) {
+                                               Toast.makeText(activity,e.getMessage(),Toast.LENGTH_SHORT).show();
+//                                               membershipReqCheck.setValue(2);
+                                           }
+                                       }
+                        )
+        );
+    }
+
+    public void resendOTP(FragmentActivity activity){
+        Token = activity.getSharedPreferences("Token", Context.MODE_PRIVATE);
+        access_token = Token.getString("access_token", null);
+
+        disposable.add(
+                api.resendOTP("Bearer "+access_token)
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeWith(new DisposableSingleObserver<OTPresendResponse>(){
+                                           @Override
+                                           public void onSuccess(OTPresendResponse response) {
+                                               Toast.makeText(activity,"OTP sent",Toast.LENGTH_SHORT).show();
+                                           }
+
+                                           @Override
+                                           public void onError(Throwable e) {
+                                               Toast.makeText(activity,e.getMessage(),Toast.LENGTH_SHORT).show();
+                                           }
+                                       }
+                        )
+        );
+    }
+
+
     public void requestMembership(FragmentActivity activity, MembershipRequest membershipRequest){
         Token = activity.getSharedPreferences("Token", Context.MODE_PRIVATE);
         access_token = Token.getString("access_token", null);

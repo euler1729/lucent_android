@@ -94,6 +94,7 @@ public class LoginViewModel extends AndroidViewModel {
                                 SharedPreferences.Editor storeToken = token.edit();
                                 storeToken.putString("name", value.getName());
                                 storeToken.putString("phone", value.getPhone());
+                                storeToken.putBoolean("verified", value.getVerified());
                                 storeToken.apply();
                                 // Update menu items
                                 MenuItem bedMenuItem = MainActivity.menu.findItem(R.id.id_action_login);

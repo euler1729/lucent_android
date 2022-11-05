@@ -8,6 +8,7 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.Header;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
@@ -64,5 +65,11 @@ public class API {
     }
     public Single<Membership> requestMembership(@Header("AUTHORIZATION")String bearerToken,  @Body MembershipRequest membershipRequest){
         return orgAPI.requestMembership(bearerToken, membershipRequest);
+    }
+    public Single<OTPResponse> verifyOTP(@Header("AUTHORIZATION")String bearerToken, @Query(value = "phone", encoded = true) String phone, @Query(value = "code", encoded = true) String code){
+        return orgAPI.requestVerification(bearerToken, phone, code);
+    }
+    public Single<OTPresendResponse> resendOTP(@Header("AUTHORIZATION") String bearerToken){
+        return orgAPI.resendOTP(bearerToken);
     }
 }

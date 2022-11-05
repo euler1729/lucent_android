@@ -31,6 +31,7 @@ import com.example.lucent.adapter.PagerAdapter;
 import com.example.lucent.databinding.FragmentOrgPageBinding;
 import com.example.lucent.model.API;
 import com.example.lucent.model.MembershipRequest;
+import com.example.lucent.model.OTPRequest;
 import com.example.lucent.model.Organization;
 import com.example.lucent.model.PayRequest;
 import com.example.lucent.util.PopupDialog;
@@ -60,6 +61,7 @@ public class OrgPageFragment extends Fragment{
     private TabLayout tabLayout;
     private ViewPager2 viewPager;
     private Dialog dialog;
+    SharedPreferences Token;
 
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog pay_window;
@@ -70,9 +72,9 @@ public class OrgPageFragment extends Fragment{
     private AlertDialog logDialog;
     private Button logPopBtn;
 
-    private AlertDialog membership_req_window;
-    private Button send_req_btn;
-    private EditText nid;
+    private AlertDialog membership_req_window, otp_view_window;
+    private Button send_req_btn, resendBtn, verifyBtn;
+    private EditText nid, otp;
     private EditText membershipCode;
 
     public OrgPageFragment() {
@@ -130,6 +132,7 @@ public class OrgPageFragment extends Fragment{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         donateBtn.setOnClickListener(View->{
+//            donateBtn.setText("Processing");
             viewModel.checkMembership(requireActivity(),organization.getId());
             observeViewModel();
         });
@@ -162,6 +165,9 @@ public class OrgPageFragment extends Fragment{
                 else if(ck==3){//Send membership request
                     requestMembership();
                 }
+                if(ck==4){
+                    requestOTPverification();
+                }
             }
         });
         viewModel.paychek.observe(getViewLifecycleOwner(),ck->{
@@ -193,6 +199,34 @@ public class OrgPageFragment extends Fragment{
             }
         });
     }
+    private void requestOTPverification(){
+        dialogBuilder = new AlertDialog.Builder(requireContext());
+        final View otp_view = getLayoutInflater().inflate(R.layout.otp_popup,null);
+        otp =(EditText) otp_view.findViewById(R.id.otpInput);
+        resendBtn = (Button) otp_view.findViewById(R.id.resendBtn);
+        verifyBtn = (Button) otp_view.findViewById(R.id.verifyBtn);
+
+        dialogBuilder.setView(otp_view);
+        otp_view_window = dialogBuilder.create();
+        otp_view_window.show();
+
+        Token = requireActivity().getSharedPreferences("Token", Context.MODE_PRIVATE);
+
+        verifyBtn.setOnClickListener(v -> {
+            String otpVal = String.valueOf(otp.getText());
+            viewModel.verifyAccount(requireActivity(), new OTPRequest(Token.getString("phone", null), String.valueOf(otpVal)));
+            otp_view_window.dismiss();
+        });
+
+        resendBtn.setOnClickListener(v -> {
+            viewModel.resendOTP(requireActivity());
+        });
+
+
+
+    }
+
+
     private void requestMembership(){
         dialogBuilder = new AlertDialog.Builder(requireContext());
         final View membership_req_view = getLayoutInflater().inflate(R.layout.membership_request_popup,null);
@@ -221,7 +255,9 @@ public class OrgPageFragment extends Fragment{
         pay_window.show();
         paynow.setOnClickListener(v->{
             pay(String.valueOf(amount.getText()));
+            donateBtn.setText("Donate");
         });
+
 
 
     }
