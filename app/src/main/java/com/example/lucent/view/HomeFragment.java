@@ -51,8 +51,8 @@ public class HomeFragment extends Fragment implements OrgAdapter.ItemClickListen
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container,false);
         View view = binding.getRoot();
 
-        imgView = binding.coverImg;
-        imgView.setImageResource(R.drawable.cover_img);
+//        imgView = binding.coverImg;
+//        imgView.setImageResource(R.drawable.cover_img);
         swipeRefreshLayout = binding.fragmentHome;
         progressBar = binding.idLoadingProgressbar;
         errTextView = binding.idErrorMessage;

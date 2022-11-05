@@ -21,12 +21,12 @@
         app:srcCompat="@drawable/success" />
 
     <TextView
-        android:layout_gravity="center"
         android:id="@+id/textView10"
-        android:layout_width="136dp"
+        android:layout_width="206dp"
         android:layout_height="48dp"
+        android:layout_gravity="center"
         android:layout_marginBottom="24dp"
-        android:fontFamily="@font/acme"
+        android:fontFamily="@font/poppins_bold"
         android:gravity="center"
         android:text="Payment Sucessful!"
         android:textColor="@color/teal_700"

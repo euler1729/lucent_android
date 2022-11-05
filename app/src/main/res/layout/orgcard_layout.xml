@@ -19,14 +19,15 @@
 
         <ImageView
             android:id="@+id/idCardProfileImg"
-            android:layout_width="128dp"
-            android:layout_height="128dp"
+            android:layout_width="110dp"
+            android:layout_height="123dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_gravity="center"
-            android:layout_marginTop="40dp"
-            android:layout_marginEnd="239dp"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="47dp"
+            android:layout_marginEnd="238dp"
             android:contentDescription="Organization" />
 
         <TextView
@@ -40,7 +41,7 @@
             android:layout_marginStart="138dp"
             android:layout_marginTop="39dp"
             android:layout_marginEnd="16dp"
-            android:fontFamily="@font/acme"
+            android:fontFamily="@font/poppins_bold"
             android:gravity="center"
             android:text="orgName"
             android:textSize="20sp"
@@ -56,18 +57,19 @@
             android:layout_marginStart="138dp"
             android:layout_marginTop="79dp"
             android:layout_marginEnd="13dp"
+            android:fontFamily="sans-serif"
             android:text="Descs of Orgs" />
 
         <Button
             android:id="@+id/idDonateBtn"
-            android:layout_width="122dp"
+            android:layout_width="233dp"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="122dp"
-            android:layout_marginEnd="122dp"
             android:layout_marginTop="170dp"
+            android:layout_marginEnd="11dp"
             android:text="Donate"
             android:textSize="10sp"
             tools:ignore="SmallSp" />

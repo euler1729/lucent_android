@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
     <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -10,7 +9,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#673AB7"
-            android:backgroundTint="@color/teal_700"
             android:isScrollContainer="false"
             android:orientation="horizontal">
 
@@ -18,25 +16,34 @@
                 android:id="@+id/id_table_description"
                 android:layout_width="116dp"
                 android:layout_height="match_parent"
+                android:background="#FFFFFF"
+                android:backgroundTint="#FFFFFF"
                 android:gravity="center"
                 android:text="Description"
-                android:textColor="#000000" />
+                android:textColor="#000000"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/id_table_amount"
                 android:layout_width="134dp"
-                android:layout_height="match_parent"
+                android:layout_height="50dp"
+                android:background="#FFFFFF"
+                android:backgroundTint="#FFFFFF"
                 android:gravity="center"
                 android:text="Amount"
-                android:textColor="#000000" />
+                android:textColor="#000000"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/id_table_time"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:backgroundTint="#FFFFFF"
                 android:gravity="center"
                 android:text="Time"
-                android:textColor="#000000" />
+                android:textColor="#000000"
+                android:textStyle="bold"
+                android:background="#FFFFFF" />
 
         </LinearLayout>
 

@@ -8,13 +8,15 @@
 
         <TextView
             android:id="@+id/textView"
-            android:layout_width="wrap_content"
+            android:layout_width="93dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="148dp"
+            android:layout_marginStart="159dp"
             android:layout_marginTop="152dp"
+            android:layout_marginEnd="159dp"
             android:fontFamily="@font/lobster"
             android:text="Sign in"
             android:textSize="34sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -24,10 +26,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="100dp"
             android:layout_marginTop="56dp"
+            android:layout_marginEnd="101dp"
             android:autofillHints="+8801"
             android:ems="10"
             android:hint="Phone"
             android:inputType="textPersonName"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView"
             tools:ignore="TouchTargetSizeCheck" />
@@ -38,9 +42,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="100dp"
             android:layout_marginTop="30dp"
+            android:layout_marginEnd="101dp"
             android:ems="10"
             android:hint="Password"
             android:inputType="textPassword"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/login_phone"
             tools:ignore="TouchTargetSizeCheck" />
@@ -51,7 +57,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="161dp"
             android:layout_marginTop="52dp"
+            android:layout_marginEnd="162dp"
             android:text="Login"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/login_password" />
 
@@ -71,10 +79,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginTop="66dp"
+            android:layout_marginEnd="61dp"
             android:backgroundTint="#FFFFFF"
             android:shadowColor="#FFFFFF"
             android:text="Register"
             android:textColor="#000000"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView2"
             app:layout_constraintTop_toBottomOf="@+id/login_btn" />
 
